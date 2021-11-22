@@ -34,8 +34,6 @@ DISTFILES += \
     qml/visualizations/Fog.qml \
     qml/visualizations/Moon.qml \
     qml/visualizations/Precipitation.qml \
-    qml/visualizations/Rain.qml \
-    qml/visualizations/Snow.qml \
     qml/visualizations/Sun.qml \
     qml/visualizations/Thunderstorm.qml \
     resources/citiesList.json

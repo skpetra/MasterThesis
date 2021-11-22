@@ -5,7 +5,7 @@ Item {
 
     id: precipitationItem
 
-    property string type: "" // tip padalina
+    property string type: "" // tip padalina - rain ili snow
     property int intensity: 2 // intenzitet padalina
 
     implicitWidth: 100
