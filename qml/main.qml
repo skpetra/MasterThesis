@@ -19,6 +19,4 @@ ApplicationWindow {
         anchors.fill: parent
         initialItem: CitiesListPage {}
     }
-
-
 }

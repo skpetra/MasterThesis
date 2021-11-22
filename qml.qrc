@@ -8,5 +8,18 @@
         <file>qml/pages/CitiesListPage.qml</file>
         <file>qml/pages/CityMenuPage.qml</file>
         <file>resources/icons/back.png</file>
+        <file>qml/visualizations/Cloud.qml</file>
+        <file>qml/visualizations/Thunderstorm.qml</file>
+        <file>resources/icons/thunderbolt.png</file>
+        <file>qml/visualizations/Fog.qml</file>
+        <file>qml/visualizations/Sun.qml</file>
+        <file>qml/visualizations/FewCloudsNight.qml</file>
+        <file>qml/visualizations/Moon.qml</file>
+        <file>qml/visualizations/FewCloudsDay.qml</file>
+        <file>qml/visualizations/BrokenClouds.qml</file>
+        <file>qml/visualizations/Precipitation.qml</file>
+        <file>resources/icons/rain.png</file>
+        <file>resources/icons/snow.png</file>
+        <file>qml/visualizations/Drizzle.qml</file>
     </qresource>
 </RCC>

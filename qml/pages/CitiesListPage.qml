@@ -7,6 +7,8 @@ Page {
     CitiesSuggestionBox {
         x: 150
         y: 100
+
+        // focus?
     }
 
 }

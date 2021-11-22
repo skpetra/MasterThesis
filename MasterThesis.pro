@@ -26,6 +26,18 @@ DISTFILES += \
     qml/main.qml \
     qml/pages/CitiesListPage.qml \
     qml/pages/HomePage.qml \
+    qml/visualizations/BrokenClouds.qml \
+    qml/visualizations/Cloud.qml \
+    qml/visualizations/Drizzle.qml \
+    qml/visualizations/FewCloudsDay.qml \
+    qml/visualizations/FewCloudsNight.qml \
+    qml/visualizations/Fog.qml \
+    qml/visualizations/Moon.qml \
+    qml/visualizations/Precipitation.qml \
+    qml/visualizations/Rain.qml \
+    qml/visualizations/Snow.qml \
+    qml/visualizations/Sun.qml \
+    qml/visualizations/Thunderstorm.qml \
     resources/citiesList.json
 
 
