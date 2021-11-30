@@ -66,8 +66,8 @@ Page {
                     id: weatherAnimationItem
                     Layout.alignment: Qt.AlignCenter
                     color: "transparent"
-                    width: 400
-                    height: 400
+                    width: 200
+                    height: 200
 
                     Loader {
                         id: weatherAnimationLoader

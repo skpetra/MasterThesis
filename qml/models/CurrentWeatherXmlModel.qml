@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQml.XmlListModel // In Qt6, XmlListModel was moved from QtQuick to QtQml as indicated in the docs so you must change to
 
+import "../../js/config.js" as Config
+
 XmlListModel {
     id: currentWeatherXmlModel
 
@@ -20,7 +22,7 @@ XmlListModel {
     }
 
     // dodat jezik 'lang=' ako ubacim translations
-    source: "https://api.openweathermap.org/data/2.5/weather?appid=394bb9ce78287e8504f6c5456b49757a&mode=xml&q=" + city + ( units ? "&units=" + encodeUnits(units) : "")
+    source: "https://api.openweathermap.org/data/2.5/weather?appid=" + Config.api_key + "&mode=xml&q=" + city + ( units ? "&units=" + encodeUnits(units) : "")
     query: "/current"
 
 

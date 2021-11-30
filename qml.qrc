@@ -27,5 +27,6 @@
         <file>qml/elements/CitiesSuggestionBox.qml</file>
         <file>qml/elements/UnitsToggleButton.qml</file>
         <file>resources/icons/back2.png</file>
+        <file>js/config.js</file>
     </qresource>
 </RCC>
