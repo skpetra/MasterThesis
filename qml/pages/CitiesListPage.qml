@@ -1,8 +1,10 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
-import "../" //CitiesSuggestionBox
+import "../elements" //CitiesSuggestionBox
 
 Page {
+
+
 
     CitiesSuggestionBox {
         x: 150

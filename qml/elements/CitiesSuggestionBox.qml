@@ -38,7 +38,7 @@ Rectangle {
                 id: iconMagnifier
                 height: parent.height
                 width: parent.width
-                source: "../resources/icons/magnifier.png"
+                source: "../../resources/icons/magnifier.png"
                 opacity: 0.2
             }
         }
@@ -63,7 +63,7 @@ Rectangle {
             // backspace ikona
             Image {
                 anchors.centerIn: parent
-                source: "../resources/icons/backspace.png"
+                source: "../../resources/icons/backspace.png"
                 height: parent.height
                 width: parent.width
                 opacity: 0.2

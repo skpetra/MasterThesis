@@ -1,19 +1,30 @@
 import QtQuick 2.0
+import "basic"
 
+// Grupa vremenskih uvjeta Drizze uvijek se prikazuje ikonom brokenClouds a jačina
+// ovog uvjeta dočarana je intenzitetom i veličinom kapljica.
 Item {
-    id: drizzleItem
+    id: drizzleGroupItem
 
     implicitWidth: 120 //100+20
     implicitHeight: 70 //60+10
 
-    Cloud {
-        x:20
-        cloudColor: "dimgray"
-    }
+    property int rainIntensity
+    property string dropOfRainSize: "small"
 
-    Cloud { y: 10 }
+    Clouds {
+        id: brokenClouds
+        brokenClouds: true
+        width: parent.width // prilagođavanje veličine oblaka vanjskom elementu u kojeg ga stavljamo
+        height: parent.height
+    }
 
     Precipitation {
         type: "rain"
+        intensity: rainIntensity
+        particlesSize: dropOfRainSize === "small" ? width * 0.08 : width * 0.1 // veličina kapljica ovisi o jačini kiše i veličini itema i koji je smješten oblak
+        width: parent.width
+        height: parent.height - parent.width * 0.8 * 0.6 - parent.width * 0.8 * 0.6 * 0.16 // duljina puta na y osi na kojem se zadržavaju padaline = visina itema - visina koju zauzimaju oblaci (visina prvog oblaka + pomak y od 16%)
+        cloudBottom: parent.width * 0.8 * 0.6 // visina oblaka = širina * 0.6 = drizzleGroupItem.width*0.8 * 0.6
     }
 }

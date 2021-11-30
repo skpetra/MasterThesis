@@ -22,9 +22,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    js/utils.js \
     qml/CitiesSuggestionBox.qml \
     qml/main.qml \
+    qml/models/CurrentWeatherXmlModel.qml \
     qml/pages/CitiesListPage.qml \
+    qml/pages/CityMenuPage.qml \
+    qml/pages/CurrentWeatherPage.qml \
     qml/pages/HomePage.qml \
     qml/visualizations/BrokenClouds.qml \
     qml/visualizations/Cloud.qml \
