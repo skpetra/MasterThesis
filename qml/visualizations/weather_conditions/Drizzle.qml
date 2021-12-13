@@ -1,8 +1,9 @@
 import QtQuick 2.0
-import "basic"
+import "../basic"
 
 // Grupa vremenskih uvjeta Drizze uvijek se prikazuje ikonom brokenClouds a jačina
 // ovog uvjeta dočarana je intenzitetom i veličinom kapljica.
+// Predviđeni omjer širine i visine elementa je: visina = širina * 0.6.
 Item {
     id: drizzleGroupItem
 

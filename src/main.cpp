@@ -4,6 +4,7 @@
 #include "citieslistmodel.h"
 #include <QQmlContext>
 
+#include <QtQml>
 
 
 int main(int argc, char *argv[])
@@ -16,7 +17,9 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    // https://stackoverflow.com/questions/32044270/qt-qml-qmlregistertype-vs-setcontextproperty-difference
     QQmlContext* context = engine.rootContext();
+
 
     // ---------------- model za prikaz CitiesSuggestionBox-a ----------------
     CitiesListModel citiesListModel;

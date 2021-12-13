@@ -3,35 +3,23 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 import "../models"
 import "../visualizations"
+import "../visualizations/weather_conditions"
 import "../../js/utils.js" as Utils
-import "../elements"
+import "../controls"
 
+// Stranica za prikaz osnovne trenutne vremenske prognoze.
 Page {
 
     id: currentWeatherPage
 
-    property var units: { "celsius": "°C", "fahrenheit": "°F" }
-    //property var weatherConditionGroups: { '2': "Thunderstorm", '3': "Drizzle", '5': "Precipitation", '6': "Precipitation", '7': "Atmosphere", '8': "Clouds" }
+    // --- public properties ---
     property string cityName
+
+    property var units: { "celsius": "°C", "fahrenheit": "°F" }
+
     title: cityName
 
-    property Component weatherComponent
-
-    MouseArea {
-        id: itemBack
-        anchors.top: parent.top
-        anchors.left: parent.left
-        height: 20
-        width: 20
-        Image{
-            id: iconBack
-            height: itemBack.height
-            width: itemBack.width
-            source: "../../resources/icons/back2.png"
-            opacity: 0.2
-        }
-        onClicked: pageStack.pop()
-    }
+    BackButton  { }
 
     UnitsToggleButton {
         anchors.top: parent.top
@@ -45,6 +33,9 @@ Page {
         city: cityName
     }
 
+    ObjectModel {} /// OVO UMJESTO DELEGATA Sunclock ...
+
+
     // može ovo jer ću --- uvijek imat jedan element --- pa u delegatu mogu prilagodit izgled kako zelim
     ListView {
         id: currentWeatherXmlListView
@@ -52,8 +43,20 @@ Page {
         z: -1 // da strelica za nazad bude poviše listviewa
         anchors.fill: parent
         model: currentWeatherXmlModel
-        delegate: ColumnLayout {
-                anchors.centerIn: parent
+
+        delegate: Item {
+
+            Sunclock {
+
+                width: currentWeatherPage.width
+                height: currentWeatherPage.height
+                anchors.centerIn: currentWeatherPage
+                sunsetString: sunset
+                sunriseString: sunrise
+                timezoneSec: timezone
+            }
+                ColumnLayout {
+
                 Text {
                     id: cityNameText
                     text: currentWeatherPage.title
@@ -96,10 +99,13 @@ Page {
 
                 Component.onCompleted: {
 
+                    console.log("page: " + currentWeatherXmlListView.width + " " + currentWeatherXmlListView.height)
                     console.log(weather_code + " " + weather_icon)
                     Utils.setWeatherAnimation(weatherAnimationLoader, weather_code, weather_icon, weatherAnimationItem.width, weatherAnimationItem.height)  // will trigger the onLoaded code when complete.
+
+
                 }
-            }
+            }}
         }
 }
 

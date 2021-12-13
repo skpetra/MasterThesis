@@ -4,8 +4,15 @@
 #include <QAbstractListModel>
 #include <QSortFilterProxyModel>
 
-typedef QPair<QString, QString> CityCountryPair;
+#include <QtQml>
 
+typedef QPair<QString, QString> CityCountryPair;
+typedef QPair<double, double> Coordinates;
+
+// The model provides the set of data that is used to create the items in the view.
+// Models can be created directly in QML using ListModel, ObjectModel, or provided by
+// C++ model classes. If a C++ model class is used, it must be a subclass of
+// QAbstractItemModel or a simple list.
 class CitiesListModel : public QAbstractListModel // Data is stored in a one-dimensional array
 {
      Q_OBJECT
@@ -18,7 +25,9 @@ public:
     // Prilagođeni modeli trebali bi vraćati podatke u tim vrstama.
     enum Roles {
         CityRole = Qt::UserRole + 1, // Za korisničke uloge, na programeru je da odluči koje će tipove koristiti i osigurati da komponente koriste ispravne tipove prilikom pristupa i postavljanja podataka.
-        CountryRole = Qt::UserRole + 2
+        CountryRole = Qt::UserRole + 2,
+        LongitudeRole = Qt::UserRole + 3,
+        LatitudeRole = Qt::UserRole + 4
     };
 
     CitiesListModel(QObject* parent = 0);
@@ -39,6 +48,8 @@ public:
 
     // ************************************ ************************* *****************************************
 
+    // setdata()
+    // To change model data, you can assign updated values to the model properties. The QML ListModel is editable by default whereas C++ models must implement setData() to become editable. Integer and JavaScript array models are read-only.
 protected:
     void readCities(); // funkcija čita sve dostupne gradove za prognozu iz .json datoteke - trebam li je smjetit u cities.h jer je ovo samo za model
 
@@ -50,6 +61,11 @@ private:
     // Each time the model interacts with the view (to notify us about changes or to serve data),
     // mCities will be used. Because it is in memory only, reading will be very fast.
     QList<CityCountryPair> mCities;
+
+    // lista parova (longitude, latitude) za svaki grad na i tom mjestu
+    // potrebna na dohvaćanje prognoze za više dana koja ne može ići preko imena grada
+    QList<Coordinates> mCoordinates;
+
 };
 
 
@@ -73,7 +89,11 @@ public:
 
     // moja funkcija kojom za određeni QModelIndex dohvaćam ime grada na tom indexu
     Q_INVOKABLE QString getCityName(const QModelIndex &index);
+
+    Q_INVOKABLE double getCityLongitude(const QModelIndex &index);
+    Q_INVOKABLE double getCityLatitude(const QModelIndex &index);
 };
 
+QML_DECLARE_TYPE(CitiesListModel)
 
 #endif // CITIESLISTMODEL_H

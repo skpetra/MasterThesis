@@ -9,24 +9,34 @@
         <file>resources/icons/back.png</file>
         <file>qml/pages/CurrentWeatherPage.qml</file>
         <file>qml/models/CurrentWeatherXmlModel.qml</file>
-        <file>qml/visualizations/Thunderstorm.qml</file>
         <file>resources/icons/thunderbolt.png</file>
-        <file>qml/visualizations/Rain.qml</file>
         <file>resources/icons/rain.png</file>
         <file>resources/icons/snow.png</file>
-        <file>qml/visualizations/Drizzle.qml</file>
-        <file>qml/visualizations/Atmosphere.qml</file>
         <file>qml/visualizations/basic/Cloud.qml</file>
         <file>qml/visualizations/basic/Fog.qml</file>
         <file>qml/visualizations/basic/Moon.qml</file>
         <file>qml/visualizations/basic/Precipitation.qml</file>
         <file>qml/visualizations/basic/Sun.qml</file>
-        <file>qml/visualizations/Snow.qml</file>
-        <file>qml/visualizations/Clouds.qml</file>
         <file>js/utils.js</file>
-        <file>qml/elements/CitiesSuggestionBox.qml</file>
-        <file>qml/elements/UnitsToggleButton.qml</file>
         <file>resources/icons/back2.png</file>
         <file>js/config.js</file>
+        <file>qml/visualizations/Sunclock.qml</file>
+        <file>qml/controls/CitiesSuggestionBox.qml</file>
+        <file>qml/controls/UnitsToggleButton.qml</file>
+        <file>qml/pages/SevenDaysWeatherPage.qml</file>
+        <file>resources/icons/pinwheel.png</file>
+        <file>qml/controls/BackButton.qml</file>
+        <file>qml/visualizations/Windmill.qml</file>
+        <file>resources/icons/detailArrows.png</file>
+        <file>qml/visualizations/weather_conditions/Atmosphere.qml</file>
+        <file>qml/visualizations/weather_conditions/Clouds.qml</file>
+        <file>qml/visualizations/weather_conditions/Drizzle.qml</file>
+        <file>qml/visualizations/weather_conditions/Rain.qml</file>
+        <file>qml/visualizations/weather_conditions/Snow.qml</file>
+        <file>qml/visualizations/weather_conditions/Thunderstorm.qml</file>
+        <file>qml/visualizations/widgets/HumidityWidget.qml</file>
+        <file>qml/visualizations/widgets/WindWidget.qml</file>
+        <file>qml/visualizations/CircularArc.qml</file>
+        <file>qml/visualizations/widgets/LongTermDayWidget.qml</file>
     </qresource>
 </RCC>

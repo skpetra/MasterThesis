@@ -1,7 +1,8 @@
 import QtQuick 2.0
-import "basic"
+import "../basic"
 
 // Grupa vremenskih uvijeta koja prikazuje poluoblačno i oblačno vrijeme ovisno o dobu dana.
+// Predviđeni omjer širine i visine elementa je: visina = širina * 0.7.
 Item {
     id: cloudsGroupItem
 
@@ -33,9 +34,9 @@ Item {
 
     Component.onCompleted: {
         if (timeOfDay == 'd')
-            timeOfDayLoader.setSource("../visualizations/basic/Sun.qml", { radius: mainCloud.width * 0.2, x: mainCloud.width * 0.7 })
+            timeOfDayLoader.setSource("../basic/Sun.qml", { radius: mainCloud.width * 0.2, x: mainCloud.width * 0.7 })
         else if (timeOfDay == 'n')
-            timeOfDayLoader.setSource("../visualizations/basic/Moon.qml", { width: mainCloud.width * 0.6, x: mainCloud.width * 0.55, y: -mainCloud.width * 0.05 })
+            timeOfDayLoader.setSource("../basic/Moon.qml", { width: mainCloud.width * 0.6, x: mainCloud.width * 0.55, y: -mainCloud.width * 0.05 })
     }
 
     // --- private functions ---

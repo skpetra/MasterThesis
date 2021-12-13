@@ -154,7 +154,13 @@ Rectangle {
 
                             // cityTextField.text = filterModel.getCityName(q_model_index) ---- kad se vratim sa sljedeće stranice na ovu s BACK da ostane upisan traženi grad
                             cityTextField.text = ""
-                            pageStack.push("qrc:/qml/pages/CityMenuPage.qml", { cityName: filterModel.getCityName(q_model_index)})
+
+                            pageStack.push("qrc:/qml/pages/CityMenuPage.qml",
+                                           {
+                                               cityName: filterModel.getCityName(q_model_index),
+                                               longitude: filterModel.getCityLongitude(q_model_index),
+                                               latitude: filterModel.getCityLatitude(q_model_index)
+                                           })
                         }
                     }
                 }
@@ -203,17 +209,4 @@ Rectangle {
             duration: 1000
         }
     }
-
-// podatke ću ipak dohvaćati kroz xml model
-//    function requestWeatherData(cityName) {
-//        var xhr = new XMLHttpRequest;
-//        xhr.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=394bb9ce78287e8504f6c5456b49757a");
-//        xhr.onreadystatechange = function() {
-//            if (xhr.readyState == XMLHttpRequest.DONE) {
-//                console.log(xhr.responseText); // ispisuje dohvaćeni json tekst
-//                var a = JSON.parse(xhr.responseText);
-//            }
-//        }
-//        xhr.send();
-//    }
 }

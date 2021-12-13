@@ -5,6 +5,7 @@ import QtQuick.Particles 2.0
 // Mogući tipovi padalina su 'rain' ili 'snow', a preko svojstva intensity
 // postavljamo koliko će se čestita emitirati u jednoj sekudni, dok
 // particlesSize svojstvo služi za određivanje početne veličine čestica.
+// Predviđeni omjer širine i visine elementa je: visina = širina * 0.6.
 Item {
 
     id: precipitationItem

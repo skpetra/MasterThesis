@@ -41,5 +41,3 @@ DISTFILES += \
     qml/visualizations/Sun.qml \
     qml/visualizations/Thunderstorm.qml \
     resources/citiesList.json
-
-

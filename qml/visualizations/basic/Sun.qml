@@ -2,6 +2,7 @@ import QtQuick 2.2
 
 
 // Element prikazuje sunce sa zrakama koje trepere oko njega.
+// Predviđeni omjer širine i visine elementa je: visina = širina.
 Item {
 
     // --- public properties ---

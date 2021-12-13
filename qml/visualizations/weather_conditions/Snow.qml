@@ -1,8 +1,9 @@
 import QtQuick 2.2
-import "basic"
+import "../basic"
 
 // Snow grupa vremenskih uvijeta prikazuje snijeg ili susnježicu.
 // Jačina ovisi o intenzitetu i veličini pahulja.
+// Predviđeni omjer širine i visine elementa je: visina = širina.
 Item {
 
     id: snowGroupItem
@@ -32,7 +33,7 @@ Item {
 
     Component.onCompleted: {
         if (isSleet){
-            sleetLoader.setSource("../visualizations/basic/Precipitation.qml",
+            sleetLoader.setSource("../basic/Precipitation.qml",
                                         {   type: "rain",
                                             intensity: sleetIntensity,
                                             particlesSize: snowGroupItem.width * 0.06,

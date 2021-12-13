@@ -1,7 +1,10 @@
-import QtQuick 2.0
-import QtQml.XmlListModel // In Qt6, XmlListModel was moved from QtQuick to QtQml as indicated in the docs so you must change to
+import QtQuick 2.2
+import QtQml.XmlListModel  // In Qt6, XmlListModel was moved from QtQuick to QtQml as indicated in the docs so you must change to
 
+import "../../js/utils.js" as Utils
 import "../../js/config.js" as Config
+
+//import org.qtproject.weather 1.0
 
 XmlListModel {
     id: currentWeatherXmlModel
@@ -13,21 +16,16 @@ XmlListModel {
     //    For temperature in Celsius use units=metric
     //    Temperature in Kelvin is used by default, no need to use units parameter in API call
     property string units: "celsius"
-    function encodeUnits(units) {
-        if (units === "celsius")
-            return "metric"
-        else if (units === "fahrenheit")
-            return "imperial"
-        return "metric";     // meni je po defaultu u Celsiusima
-    }
+
 
     // dodat jezik 'lang=' ako ubacim translations
-    source: "https://api.openweathermap.org/data/2.5/weather?appid=" + Config.api_key + "&mode=xml&q=" + city + ( units ? "&units=" + encodeUnits(units) : "")
+    source: "https://api.openweathermap.org/data/2.5/weather?appid=" + Config.api_key + "&mode=xml&q=" + city + ( units ? "&units=" + Utils.encodeUnits(units) : "")
     query: "/current"
 
 
     XmlListModelRole { name: "longitude"; elementName: "city/coord"; attributeName: "lon" }
     XmlListModelRole { name: "latitude"; elementName: "city/coord"; attributeName: "lat" }
+    XmlListModelRole { name: "timezone"; elementName: "city/timezone"}
     XmlListModelRole { name: "sunrise"; elementName: "city/sun"; attributeName: "rise" }
     XmlListModelRole { name: "sunset"; elementName: "city/sun"; attributeName: "set" }
     XmlListModelRole { name: "temperature"; elementName: "temperature"; attributeName: "value" }
