@@ -54,7 +54,7 @@ Rectangle {
     Image{
         width: parent.width * 0.9
         height: parent.height * 0.9
-        source: "../../resources/icons/pinwheel.png"
+        source: "qrc:/resources/icons/pinwheel.png"
 
         PropertyAnimation on rotation {
             id: anim

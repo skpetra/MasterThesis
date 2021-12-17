@@ -9,9 +9,9 @@ Rectangle {
 
     id: humidityWidget
 
+    // --- public properties ---
     property int percent // dobiveni postotak vlažnosti zraka
     property int dewPoint // zasad ne prikazujem
-
     // svojstvo služi da se postotak krene učitavati tek nakon što je komponenta vidljiva
     property bool isVisible
 

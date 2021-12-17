@@ -1,3 +1,4 @@
+// .pragma library ?
 
 // ---------------------------- CurrentWeatherPage ----------------------------
 
@@ -26,6 +27,8 @@ function setWeatherAnimation(weatherAnimationLoader, weather_code, weather_icon,
     var weatherConditionCode_1 = parseInt(weather_code.charAt(1)) // podgrupa ovisno o intenzitetu
     var weatherConditionCode_2 = parseInt(weather_code.charAt(2)) // intenziteti podgrupe
     var timeOfDay = weather_icon.charAt(2)
+
+    console.log("setanimation: " + weather_code + " " + weather_icon)
 
     if (weatherConditionCode_0 === 2) {
         weatherAnimationLoader.setSource("../qml/visualizations/weather_conditions/Thunderstorm.qml",
@@ -155,25 +158,14 @@ function getDate(unix_timestamp) {
     // Will display time in 10:30:23 format
     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
-
-    return day + "." + date.getMonth() + "." + date.getFullYear() + ".";
+    console.log(date)
+    return day + "." + (date.getMonth()+1) + "." + date.getFullYear() + ".";
 }
 
-// Funkcija iz vraća vrijeme oblika '10:30:23' iz unix time stamp formata.
-function getTime(unix_timestamp) {
-    unix_timestamp = parseInt(unix_timestamp)
-    // Create a new JavaScript Date object based on the timestamp
-    // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+// Funkcija iz vraća datum ili vrijeme u zadanom formatu iz unix time stamp formata.
+function getTime(unix_timestamp, format) {
     var date = new Date(unix_timestamp * 1000);
-    // Hours part from the timestamp
-    var hours = date.getHours();
-    // Minutes part from the timestamp
-    var minutes = "0" + date.getMinutes();
-    // Seconds part from the timestamp
-    var seconds = "0" + date.getSeconds();
-
-    // Will display time in 10:30:23 format
-    var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    var formattedTime = Qt.formatDateTime(date, format)
 
     return formattedTime;
 }
@@ -195,4 +187,3 @@ function dayOfWeekAsString(dayIndex) {
 
 
 // ---------------------------- ---------------------------- ----------------------------
-

@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts
 import "../../visualizations"
+import "../../visualizations/basic"
 import "../../../js/utils.js" as Utils
 
 // Element predstavlja komponentu koja prikazuje podatke o vjetru - brzinu, smjer i jačinu udara vjetra.

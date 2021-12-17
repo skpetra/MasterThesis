@@ -1,10 +1,10 @@
-import QtQuick 2.0
+import QtQuick 2.2
 import QtQuick.Layouts 1.15
 
-import "../../../js/utils.js" as Utils
+import "qrc:/js/utils.js" as Utils
 
 // LongTermDayWidget.qml element prikazuje podatke o vremenskoj prognozi za jedan dan u sedmodnevnom vremenskom prikazu.
-// Element ke "collapsible", i sastoji se od 2 dijela, gornjeg pravokutnika koji prikazuje osnovne podatke - dan,
+// Element je "collapsible", i sastoji se od 2 dijela, gornjeg pravokutnika koji prikazuje osnovne podatke - dan,
 // vremensku animaciju i min-max dnevnu temperaturu, te donjeg pravokutnika s detaljima koji se otvara na klik gornjeg pravokutnika.
 // Detalji sadrže zasebne elemente s podacima o vjetru, vlažnosti zraka, padalinama...
 Rectangle {
@@ -27,7 +27,6 @@ Rectangle {
     // - HumidityWidget -
     property int humidity
     property int dew
-
 
     height: mainItemHeight
     border.width: 0.5
@@ -98,12 +97,28 @@ Rectangle {
 
             Text {
                 text: "Low"
-
                 Layout.column: 1
                 Layout.row: 1
                 Layout.alignment: Qt.AlignCenter
             }
         }
+    }
+
+    Image{
+        id: arrowDown
+        anchors.right: parent.right
+        anchors.rightMargin: 5
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 5
+        height: 8
+        width: 8
+        source: "qrc:/resources/icons/triangleBottomIcon.png"
+        opacity: 0.2
+
+        Behavior on rotation {
+             NumberAnimation { duration: 250 }
+        }
+
     }
 
     // element prikazuje detaljnije podatke o vremenu na određeni dan
@@ -112,7 +127,7 @@ Rectangle {
         id: detailsItem
 
         width: mainItem.width
-        height: longTermDayWidget.mainItemHeight
+        height: 0
         anchors.top: mainItem.bottom
 
         opacity: 0 // detalji na početnu nisu vidljivi
@@ -155,13 +170,16 @@ Rectangle {
         name: "Details"
         // Make details visible
         PropertyChanges { target: detailsItem; opacity: 1 }
+        PropertyChanges { target: detailsItem; height: longTermDayWidget.mainItemHeight }
         // "otvaranje" pravokutnika za prikaz detalja
         PropertyChanges { target: longTermDayWidget; height: mainItemHeight * 2 }
+        PropertyChanges { target: arrowDown; rotation: 180 }
     }
 
     transitions: Transition {
         //Make the state changes smooth
-        NumberAnimation { duration: 200; property: "height" } // ili 300 mozda bolje - // "otvaranje" pravokutnika za prikaz detalja
-        NumberAnimation { duration: 200; property: "opacity" }
+        NumberAnimation { duration: 250; property: "height" } // ili 300 mozda bolje - // "otvaranje" pravokutnika za prikaz detalja
+        NumberAnimation { duration: 250; property: "opacity" }
+
     }
 }

@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
-Rectangle {
+Item {
 
     id: suggestionBox
 
@@ -17,7 +17,7 @@ Rectangle {
         id: cityTextField
 
         implicitWidth: parent.width
-        implicitHeight: parent.height
+        implicitHeight: parent.height // zbog cityTextField.contentHeight warninga - QML TextField: Binding loop detected for property "implicitHeight"
         placeholderText: qsTr("Enter city")
 
         // uređivanje polja
@@ -44,9 +44,9 @@ Rectangle {
         }
 
         // text pomaknut nakon ikone povećala
-        leftPadding: itemMagnifier.width + 2*itemMagnifier.anchors.margins
+        leftPadding: itemMagnifier.width + 2 * itemMagnifier.anchors.margins
         // centriranje teksta
-        topPadding: (height-contentHeight)/2
+        topPadding: (cityTextField.height - cityTextField.contentHeight)/2
 
         // brisanje unesenog teksta
         MouseArea {
@@ -155,12 +155,14 @@ Rectangle {
                             // cityTextField.text = filterModel.getCityName(q_model_index) ---- kad se vratim sa sljedeće stranice na ovu s BACK da ostane upisan traženi grad
                             cityTextField.text = ""
 
-                            pageStack.push("qrc:/qml/pages/CityMenuPage.qml",
+                            pageStack.push("qrc:/qml/pages/CurrentWeatherPage.qml",
                                            {
                                                cityName: filterModel.getCityName(q_model_index),
                                                longitude: filterModel.getCityLongitude(q_model_index),
-                                               latitude: filterModel.getCityLatitude(q_model_index)
+                                               latitude: filterModel.getCityLatitude(q_model_index),
+
                                            })
+
                         }
                     }
                 }

@@ -14,6 +14,7 @@ import "../visualizations/widgets"
 Page {
 
     id: sevenDaysWeatherPage
+    objectName: "SevenDaysWeatherPage"
 
     // --- public properties ---
     property string cityName
@@ -24,20 +25,15 @@ Page {
 
     property string units: "celsius"
 
+    signal unitsButtonToggled(string units)
+
     title: cityName
     clip: true
 
-    BackButton { }
 
-    UnitsToggleButton {
-        id: button
-        anchors.top: parent.top
-        anchors.right: parent.right
-
-        onToggled: function(units) {
-            sevenDaysWeatherPage.units = units
-            updateTemperatureData(cityName)
-        }
+    onUnitsButtonToggled: function(units) {
+        sevenDaysWeatherPage.units = units
+        updateTemperatureData(cityName)
     }
 
     ListModel {
@@ -46,7 +42,7 @@ Page {
 
     ListView {
 
-        id: listview
+        id: sevenDaysListView
 
         anchors.fill: parent
         model: sevenDaysListModel
@@ -56,7 +52,7 @@ Page {
             id: sevenDaysDelegate
 
             LongTermDayWidget {
-                width: listview.width
+                width: sevenDaysListView.width
                 // - mainItem -
                 weekDay: weekDayModel
                 date: dateModel
@@ -85,14 +81,14 @@ Page {
 
     // --- private functions ---
 
-    // Funkcija za dohvat podataka preko JSON formata.
+    // Funkcija za dohvat podataka o vremenskoj prognozi na dan i idućih sedam dana preko JSON formata.
     // Dohvaćeni podaci dodaju se u ListModel koji se prikazuje u ListViewu.
     function requestWeatherData(cityName) {
         var xhr = new XMLHttpRequest;
         xhr.open("GET", "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&exclude=current,minutely,hourly,alerts" + ( units ? "&units=" + Utils.encodeUnits(units) : ""));
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
-                //console.log(xhr.responseText); // ispisuje dohvaćeni json tekst
+                console.log(xhr.responseText); // ispisuje dohvaćeni json tekst
                 var obj = JSON.parse(xhr.responseText);
 
                 for (var i in obj.daily) {
@@ -101,8 +97,8 @@ Page {
                                      dateModel: Utils.getDate(obj.daily[i].dt),
                                      weatherCodeModel: obj.daily[i].weather[0].id,
                                      weatherIconModel: obj.daily[i].weather[0].icon,
-                                     temperatureMinModel: Math.floor(obj.daily[i].temp.min), // pretvorit int????
-                                     temperatureMaxModel: Math.floor(obj.daily[i].temp.max),
+                                     temperatureMinModel: Math.floor(obj.daily[i].temp.min) + "°", // pretvorit int????
+                                     temperatureMaxModel: Math.floor(obj.daily[i].temp.max) + "°",
                                      sunsetModel: obj.daily[i].sunset,
                                      sunriseModel: obj.daily[i].sunrise,
                                      windSpeedModel: obj.daily[i].wind_speed,
@@ -127,8 +123,8 @@ Page {
                 var obj = JSON.parse(xhr.responseText);
 
                 for (var i in obj.daily) {
-                    sevenDaysListModel.setProperty(i, "temperatureMinModel", Math.floor(obj.daily[i].temp.min))
-                    sevenDaysListModel.setProperty(i, "temperatureMaxModel", Math.floor(obj.daily[i].temp.max))
+                    sevenDaysListModel.setProperty(i, "temperatureMinModel", Math.floor(obj.daily[i].temp.min) + "°")
+                    sevenDaysListModel.setProperty(i, "temperatureMaxModel", Math.floor(obj.daily[i].temp.max) + "°")
 
                 }
             }

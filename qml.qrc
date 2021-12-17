@@ -4,8 +4,7 @@
         <file>qml/main.qml</file>
         <file>resources/icons/magnifier.png</file>
         <file>resources/icons/backspace.png</file>
-        <file>qml/pages/CitiesListPage.qml</file>
-        <file>qml/pages/CityMenuPage.qml</file>
+        <file>qml/pages/MenuPage.qml</file>
         <file>resources/icons/back.png</file>
         <file>qml/pages/CurrentWeatherPage.qml</file>
         <file>qml/models/CurrentWeatherXmlModel.qml</file>
@@ -25,8 +24,7 @@
         <file>qml/controls/UnitsToggleButton.qml</file>
         <file>qml/pages/SevenDaysWeatherPage.qml</file>
         <file>resources/icons/pinwheel.png</file>
-        <file>qml/controls/BackButton.qml</file>
-        <file>qml/visualizations/Windmill.qml</file>
+        <file>qml/controls/PageToolBar.qml</file>
         <file>resources/icons/detailArrows.png</file>
         <file>qml/visualizations/weather_conditions/Atmosphere.qml</file>
         <file>qml/visualizations/weather_conditions/Clouds.qml</file>
@@ -38,5 +36,10 @@
         <file>qml/visualizations/widgets/WindWidget.qml</file>
         <file>qml/visualizations/CircularArc.qml</file>
         <file>qml/visualizations/widgets/LongTermDayWidget.qml</file>
+        <file>qml/visualizations/widgets/OneHourWidget.qml</file>
+        <file>resources/icons/triangleBottomIcon.png</file>
+        <file>qml/visualizations/widgets/CurrentWeatherWidget.qml</file>
+        <file>qml/visualizations/basic/Windmill.qml</file>
+        <file>resources/icons/home.png</file>
     </qresource>
 </RCC>
