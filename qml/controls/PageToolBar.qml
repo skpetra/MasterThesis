@@ -44,9 +44,10 @@ ToolBar {
                                    {
                                        cityName: pageStack.currentItem.cityName,
                                        longitude : pageStack.currentItem.longitude,
-                                       latitude : pageStack.currentItem.latitude
+                                       latitude : pageStack.currentItem.latitude,
+                                       weatherData: pageStack.currentItem.weatherData,
+                                       units: pageStack.currentItem.units
                                    })
-                    pageStack.currentItemChanged()
                 }
             }
         }
@@ -64,9 +65,10 @@ ToolBar {
                                        {
                                            cityName: pageStack.currentItem.cityName,
                                            longitude : pageStack.currentItem.longitude,
-                                           latitude : pageStack.currentItem.latitude
+                                           latitude : pageStack.currentItem.latitude,
+                                           weatherData: pageStack.currentItem.weatherData,
+                                           units: pageStack.currentItem.units
                                        })
-                    pageStack.currentItemChanged()
                 }
             }
         }

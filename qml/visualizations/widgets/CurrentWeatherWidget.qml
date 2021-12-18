@@ -15,17 +15,13 @@ Item {
     // --- public properties ---
     property alias temperature: currentTemperatureText.text
     property alias feelsLike: feelsLikeTemperatureText.text
+    property alias weatherAnimation: weatherAnimationLoader
+    property alias weatherAnimationDimensions: weatherAnimationItem.width
 
     property string cityName
     property int widgetHeight
 
-//    property string weatherCode
-//    property string weatherIcon
-//    property string currentTemperature
-//    property string feelsLikeTemperature
-
     height: widgetHeight
-
 
     // --- osnovni podaci ---
     RowLayout{
@@ -167,35 +163,5 @@ Item {
         //Make the state changes smooth
         NumberAnimation { duration: 500; property: "height" }
         NumberAnimation { duration: 500; property: "opacity" }
-    }
-
-    Component.onCompleted: {
-        requestCurrentWeatherData()
-    }
-
-    // --- private functions ---
-
-    // Funkcija za dohvat podataka o trenutnoj prognozi preko JSON formata.
-    // Dohvaćeni podaci pridružuju se svojstvima direktno.
-    function requestCurrentWeatherData() {
-
-        var xhr = new XMLHttpRequest;
-        xhr.open("GET", "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&exclude=hourly,minutely,daily,alerts" + ( units ? "&units=" + Utils.encodeUnits(units) : ""));
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                console.log("DONE")
-                var obj = JSON.parse(xhr.responseText);
-                console.log( obj.current.weather[0].id+ "")
-                console.log(obj.current.weather[0].icon+ "")
-                // currentWeatherWidget
-//                currentWeatherWidget.weatherCode = obj.current.weather[0].id + ""
-//                currentWeatherWidget.weatherIcon = obj.current.weather[0].icon + ""
-                currentTemperatureText.text = Math.floor(obj.current.temp) + "°"
-                feelsLikeTemperatureText.text = Math.floor(obj.current.feels_like) + "°"
-
-                Utils.setWeatherAnimation(weatherAnimationLoader, obj.current.weather[0].id + "", obj.current.weather[0].icon, weatherAnimationItem.width, weatherAnimationItem.height)  // will trigger the onLoaded code when complete.
-            }
-        }
-        xhr.send();
     }
 }

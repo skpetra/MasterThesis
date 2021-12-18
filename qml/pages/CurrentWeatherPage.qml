@@ -1,13 +1,15 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.4
 import QtQuick.Layouts
+
 import "../models"
 import "../visualizations"
 import "../visualizations/weather_conditions"
 import "../visualizations/widgets"
+import "../controls"
+
 import "qrc:/js/utils.js" as Utils
 import "qrc:/js/config.js" as Config
-import "../controls"
 
 // Stranica za prikaz dostupnih podataka trenutne vremenske prognoze.
 Page {
@@ -22,6 +24,9 @@ Page {
     property double longitude
     property double latitude
     property string units: "celsius"
+    // weatherData svojstvo je objekt dobiven iz stringa podataka u JSON formatu
+    // svojstvo se inicijalizira na Component.onCompleted stranice
+    property var weatherData
 
     signal unitsButtonToggled(string units)
 
@@ -51,21 +56,9 @@ Page {
             //height: currentWeatherPage.height / 3
             widgetHeight: currentWeatherPage.height / 3
             cityName: currentWeatherPage.cityName
-            // ostala svojstva postavlja funkcija requestCurrentWeatherData()
-
-                    //        weatherCode: weather_code
-                    //        weatherIcon: weather_icon
-
-                    //        currentTemperature: Math.floor(temperature) + "°"
-                    //        feelsLikeTemperature: Math.floor(feels_like) + "°"
-
-    //        Component.onCompleted: {
-    //            requestCurrentWeatherData()
-    //        }
-
 
             onStateChanged: {
-                console.log("currentWeatherWidget.height: " + currentWeatherWidget.height)
+                //console.log("currentWeatherWidget.height: " + currentWeatherWidget.height)
 
                 if(state === 'Details'){
                     scrollView.contentHeight += widgetHeight
@@ -124,10 +117,6 @@ Page {
                         weatherIcon: icon
                     }
                 }
-
-                Component.onCompleted: {
-                    requestWeatherData()
-                }
             }
         }
 
@@ -141,80 +130,81 @@ Page {
     //        color: "blue"
     //    }
 
+        Component.onCompleted: {
+            //console.log("CURRENT WEATHER " + longitude + " " + latitude)
+        }
     }
+
+    // Component.onCompleted is an attached signal handler.
+    // It is often used to execute some JavaScript code when its creation process is complete.
+    Component.onCompleted: {
+
+        // Podaci o vremenu (current, hourly, daily) za jedan grad dohvaćaju se samo jednom po odabranom gradu na suggestionboxu za odabir grada.
+        // inače se prikazuju već prije dohvaćeni podaci (npr. koji su bili poslani stranici SevenDaysWeatherPage).
+        if (typeof weatherData === "undefined") {
+            console.log("Dohvaćam nove podatke: " + "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&units=metric")
+
+            var xhr = new XMLHttpRequest;
+            xhr.open("GET", "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&units=metric");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    var obj = JSON.parse(xhr.responseText);
+                    weatherData = obj
+                    setWeatherData(obj)
+                }
+            }
+            xhr.send();
+        }
+        else
+            setWeatherData(weatherData)
+
+    }
+
 
     // --- private functions ---
 
+    // Postavljanje svih svojstava objekata na CurrentWeatherPage stranici koji ovise o dohvaćenim podacima.
+    // Podaci se dohvaćaju odnosno šalju na Component.onCompleted CurrentWeatherPage stranice.
+    function setWeatherData(obj){
+
+        // ---------- currentWeatherWidget ----------
+        currentWeatherWidget.temperature = Math.floor(Utils.convertTo(units, obj.current.temp)) + "°"
+        currentWeatherWidget.feelsLike = Math.floor(Utils.convertTo(units, obj.current.feels_like)) + "°"
+        Utils.setWeatherAnimation(currentWeatherWidget.weatherAnimation, obj.current.weather[0].id + "", obj.current.weather[0].icon, currentWeatherWidget.weatherAnimationDimensions, currentWeatherWidget.weatherAnimationDimensions)  // will trigger the onLoaded code when complete.
+
+
+        // ---------- hourlyListModel -----------
+        var x = new Date()
+        var UTCseconds = (Math.floor(x.getTime()/1000) + x.getTimezoneOffset()*60) // current UTC
+        UTCseconds += obj.timezone_offset // local utc
+        //var curentHourLocal =  Utils.getTime(Math.floor(UTCseconds), "h")
+        for (var i in obj.hourly) {
+               if (Number(i) <= 24){
+                    hourlyListModel.append({
+                         formattedHour: Utils.getTime(obj.hourly[Number(i)].dt + obj.timezone_offset, "hh"),
+                         code: obj.hourly[Number(i)].weather[0].id + "",
+                         icon: obj.hourly[Number(i)].weather[0].icon + "",
+                         temp: Math.floor(Utils.convertTo(units, obj.hourly[Number(i)].temp)) + "°"
+                    })
+                }
+        }
+    }
+
+    // Podaci o temperaturi se ažuriraju ovisno o mjernoj jedinici pozivanjem funkcije za preračunavanje °C u °F.
+    // Izvorno se podaci dohvaćaju u °C pa je funkcija convertTo(units, value) implementirana u skladu s tim.
+    // Poziva se pritiskom na gumb UnitsToggleButton.
     function updateTemperatureData() {
-        var xhr = new XMLHttpRequest;
-        xhr.open("GET", "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&exclude=daily,minutely,alerts" + ( units ? "&units=" + Utils.encodeUnits(units) : ""));
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                var obj = JSON.parse(xhr.responseText);
 
-                currentWeatherWidget.temperature = Math.floor(obj.current.temp) + "°"
-                currentWeatherWidget.feelsLike = Math.floor(obj.current.feels_like) + "°"
+        // ------ currentWeatherWidget ------
+        currentWeatherWidget.temperature = Math.floor(Utils.convertTo(units, weatherData.current.temp)) + "°"
+        currentWeatherWidget.feelsLike = Math.floor(Utils.convertTo(units, weatherData.current.feels_like)) + "°"
 
-                for (var i in obj.hourly) {
-
-                    if(Number(i) <= 24)
-                        hourlyListModel.setProperty(Number(i), "temp", Math.floor(obj.hourly[Number(i)+1].temp) + "°")
-                }
-
-            }
+        // ------ hourlyListModel ------
+        for (var i in weatherData.hourly) {
+            if(Number(i) <= 24)
+                hourlyListModel.setProperty(Number(i), "temp", Math.floor(Utils.convertTo(units, weatherData.hourly[Number(i)].temp)) + "°")
         }
-        xhr.send();
     }
-
-
-
-    function requestWeatherData() {
-        var xhr = new XMLHttpRequest;
-
-        console.log("ŠIRINA: " + longitude + " " + latitude)
-        xhr.open("GET", "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&exclude=current,minutely,daily,alerts" + ( units ? "&units=" + Utils.encodeUnits(units) : ""));
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                //console.log(xhr.responseText); // ispisuje dohvaćeni json tekst
-                var obj = JSON.parse(xhr.responseText);
-
-                var x = new Date()
-                var UTCseconds = (Math.floor(x.getTime()/1000) + x.getTimezoneOffset()*60) // current UTC
-
-                //console.log(UTCseconds)
-
-                UTCseconds += obj.timezone_offset // local utc
-
-                console.log(UTCseconds)
-
-               console.log("UTCseconds2", Utils.getTime(Math.floor(UTCseconds), "h"))
-                var curentHourLocal =  Utils.getTime(Math.floor(UTCseconds), "h")
-
-                console.log("curentHourLocal " + curentHourLocal)
-
-                var br = 0
-                for (var i in obj.hourly) {
-                    console.log(Number(i) + "  " + Utils.getTime(obj.hourly[Number(i)].dt + obj.timezone_offset, "hh") + " " + curentHourLocal )
-                       if (Number(i) <= 24){ // samo za 24 sata, obj.hourly[0] je 01 sat, i->i+1 sat
-                           //++br
-                           console.log(Utils.getTime(obj.hourly[i].dt, "hh"))
-                            hourlyListModel.append({
-                                             formattedHour: Utils.getTime(obj.hourly[Number(i)].dt + obj.timezone_offset, "hh"), // +1 jer od ljedećeg sata idu po satima
-                                             code: obj.hourly[Number(i)].weather[0].id + "",
-                                             icon: obj.hourly[Number(i)].weather[0].icon + "",
-                                             temp: Math.floor(obj.hourly[Number(i)].temp) + "°"
-                                         })
-                    }
-                }
-
-
-            }
-
-            console.log(currentWeatherHourlyListView.contentWidth)
-        }
-        xhr.send();
-    }
-
 }
 
 

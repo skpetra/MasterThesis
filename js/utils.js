@@ -28,8 +28,6 @@ function setWeatherAnimation(weatherAnimationLoader, weather_code, weather_icon,
     var weatherConditionCode_2 = parseInt(weather_code.charAt(2)) // intenziteti podgrupe
     var timeOfDay = weather_icon.charAt(2)
 
-    console.log("setanimation: " + weather_code + " " + weather_icon)
-
     if (weatherConditionCode_0 === 2) {
         weatherAnimationLoader.setSource("../qml/visualizations/weather_conditions/Thunderstorm.qml",
                                         {  precipitationType: weatherConditionCode_1 === 0 || weatherConditionCode_1 === 3 ? "rain" : "", // ako je kod 200, 201, 202 ili 230, 231, 232 --- onda su kapljice
@@ -158,7 +156,6 @@ function getDate(unix_timestamp) {
     // Will display time in 10:30:23 format
     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
-    console.log(date)
     return day + "." + (date.getMonth()+1) + "." + date.getFullYear() + ".";
 }
 
@@ -186,4 +183,33 @@ function dayOfWeekAsString(dayIndex) {
 }
 
 
-// ---------------------------- ---------------------------- ----------------------------
+// ---------------------------- funkcije za pretvorbu temperature ----------------------------
+
+// Funkcija koja prema dobivenoj mjernoj jedinici i vrijednosti temperature, ovisno o jedinici ostavlja
+// °C nepromijenjenima ukoliko je tražena jedinica "celsius" ili pretvara vrijednost u °F ukoliko je jedinica "fahrenheit".
+// Funkcija je ovako implementirana budući da se podaci o temperaturi uvijek dohvaćaju u celsiusima.
+function convertTo(units, value) {
+    if (units === "celsius")
+        return value
+    else if (units === "fahrenheit") {
+        console.log("F to C")
+        let fahrenheit = value * 9/5 + 32
+
+        return fahrenheit
+    }
+    return null
+}
+
+function convertToF(celsius) {
+  // make the given fahrenheit variable equal the given celsius value
+  // multiply the given celsius value by 9/5 then add 32
+  let fahrenheit = celsius * 9/5 + 32
+  // return the variable fahrenheit as the answer
+  return fahrenheit;
+}
+
+function convertToC(fahrenheit) {
+  let celsius = (5/9) * (fahrenheit - 32)
+
+  return celsius;
+}

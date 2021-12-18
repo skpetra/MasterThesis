@@ -160,9 +160,8 @@ Item {
                                                cityName: filterModel.getCityName(q_model_index),
                                                longitude: filterModel.getCityLongitude(q_model_index),
                                                latitude: filterModel.getCityLatitude(q_model_index),
-
+                                               units: pageStack.currentItem.units ? pageStack.currentItem.units : "celsius" // ako je grad odabran na MenuPage defaultno ce bit toggleButton na °C, inače se temperatura prikazuje ovisno o jedinici koja je bila odabrana na prethodnoj stranici (Current ili SevenDays page)
                                            })
-
                         }
                     }
                 }
