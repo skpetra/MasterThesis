@@ -6,6 +6,11 @@ Page {
     id: menuPage
     objectName: "MenuPage"
 
+    Rectangle {
+        anchors.fill: parent
+        color: "#4682b4" //"slateblue"
+    }
+
     CitiesSuggestionBox {
 //        width: citiesListPage / 2
 //        height: 35

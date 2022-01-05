@@ -34,7 +34,7 @@ Rectangle {
         x: parent.width * 0.41
         y: parent.height * 0.41
 
-        color: "black"
+        color: "dimgray"
         antialiasing: true
     }
 
@@ -47,7 +47,7 @@ Rectangle {
         x: parent.width * 0.435
         y: parent.width * 0.51
 
-        color: "black"
+        color: "dimgray"
     }
 
     // pinwheel

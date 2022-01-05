@@ -1,32 +1,48 @@
 import QtQuick 2.0
 import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Controls.Material 2.0
 import "../../visualizations"
 import "../../visualizations/basic"
 import "../../../js/utils.js" as Utils
 
-// Element predstavlja komponentu koja prikazuje podatke o vjetru - brzinu, smjer i jačinu udara vjetra.
+// Element predstavlja komponentu koja prikazuje podatke o brzini i smjeru vjetra.
 // Sastoji se od dvije animirane vjetrenjače i navedenih podataka.
-// Predviđeni omjer širine i visine elementa je: visina = 2/3 * širina.
-Item {
+Rectangle {
 
     id: windWidget
 
     // --- public properties ---
     property string speed
     property string direction
-    property string gust
-
     property bool isVisible: true // svojstvo služi da vjetrenjača nije aktivna kad nije vidljiva na stranici
 
     implicitWidth: 150
-    implicitHeight: 100
+    implicitHeight: 130
+    color: "transparent"
+
+    // naslov widgeta
+    Item {
+        id: widgetTitle
+        width: parent.width
+        height: parent.height * 0.2
+
+        Text {
+            text: qsTr("Wind status")
+            font.bold: true
+            color: "dimgray"
+            anchors.centerIn: parent
+        }
+    }
 
     // velika vjetrenjača
     Windmill {
         id: windmillItem
 
-        width: parent.height
-        height: parent.height
+        width: parent.height - widgetTitle.height * 1.2
+        height: parent.height - widgetTitle.height * 1.2
+        anchors.bottom: parent.bottom
+        x: 5
 
         intensity: setWindIntensity(speed)
         isActive: isVisible
@@ -34,59 +50,41 @@ Item {
 
     // mala vjetrenjača
     Windmill {
-        width: parent.height / 2
-        height: parent.height / 2
+        width: parent.height / 2.5
+        height: parent.height / 2.5
 
-        x: parent.height / 2
-        y: parent.height / 2.5
+        x: parent.height / 2.5
+        y: parent.height / 2
 
         intensity: setWindIntensity(speed)
         isActive: isVisible
     }
 
     // podaci
-    ColumnLayout {
-
+    Rectangle {
+        id: windDetailsText
         width: parent.width - windmillItem.width
-        height: windmillItem.height
-
+        height: 10
         x: windmillItem.width
-
-        spacing: -30
+        color: "transparent"
+        anchors.bottom: parent.bottom
 
         Text {
-            id: speedText
-
-            text: "Speed"
-            Layout.alignment: Qt.AlignCenter
+            id: windSpeedText
+            font.pixelSize: 15
+            color: "dimgray"
+            textFormat: Text.RichText // html
+            text: speed + '<font size="10px"> m/s</font>'
+            anchors.bottom: windDirectionText.top
+            anchors.horizontalCenter: parent.horizontalCenter
         }
 
         Text {
-            text: speed + " m/s"
-            font.pixelSize: speedText.font.pixelSize - 2
-            Layout.alignment: Qt.AlignCenter
-        }
-
-        Text {
-            text: "Direction"
-            Layout.alignment: Qt.AlignCenter
-        }
-
-        Text {
+            id: windDirectionText
             text: getWindDirection(direction)
-            font.pixelSize: speedText.font.pixelSize - 2
-            Layout.alignment: Qt.AlignCenter
-        }
-
-        Text {
-            text: "Gust"
-            Layout.alignment: Qt.AlignCenter
-        }
-
-        Text {
-            text: gust + " m/s"
-            font.pixelSize: speedText.font.pixelSize - 2
-            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 10
+            color: "dimgray"
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 
@@ -111,7 +109,7 @@ Item {
         return directions[w];
     }
 
-    // Funkcija određuje intenzitet vjetra prema brzini vjetra.
+    // Funkcija određuje intenzitet vjetra o kojem ovisi rotiranje vjetrenjače prema brzini vjetra.
     // Mogući intenzitet: 0-4.
     function setWindIntensity(windSpeed) {
         if (windSpeed === 0)

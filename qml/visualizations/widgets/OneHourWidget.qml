@@ -1,6 +1,5 @@
-import QtQuick
-import QtCharts
-import QtQuick.Layouts
+import QtQuick 2.0
+import QtQuick.Layouts 1.2
 
 import "qrc:/js/utils.js" as Utils
 
@@ -21,12 +20,14 @@ Rectangle {
     implicitHeight: 120
     color: "transparent"
 
+
     ColumnLayout {
-        spacing: 0
+        spacing: 5
 
         Text {
             text: hour
             font.pixelSize: 15
+            color: "#252525"
             Layout.alignment: Qt.AlignHCenter
             horizontalAlignment: Text.AlignHCenter
         }
@@ -46,6 +47,7 @@ Rectangle {
         Text {
             text: temperature
             font.pixelSize: 25
+            color: "#252525"
             Layout.alignment: Qt.AlignCenter
             horizontalAlignment: Text.AlignHCenter
         }

@@ -1,4 +1,4 @@
-// .pragma library ?
+// .pragma library ? // todo
 
 // ---------------------------- CurrentWeatherPage ----------------------------
 
@@ -137,6 +137,23 @@ function encodeUnits(units) {
 
 // ---------------------------- datetime funkcije ----------------------------
 
+
+// Funkcija iz dobivenog unix timestampa računa trenutno vrijeme u nekom gradu uzevši u obzir vremensku zonu u kojoj se grad nalazi.
+function getLocalTime(unix, timezone, format) {
+    //console.log("unix " + unix)
+    var dateTime = new Date(unix * 1000)
+    //console.log("dateTime" + dateTime)
+    // set local time - dodajem sate ovisno o vremenskoj zoni
+    dateTime.setTime(dateTime.getTime() + (timezone*1000))
+
+    if (format === "hh:mm:ss")
+        return dateTime.toISOString().substring(11,19)
+    else if (format === "hh")
+        return dateTime.toISOString().substring(11,13)
+
+    return dateTime.toISOString()
+}
+
 // Funkcija iz vraća datum oblika '12.12.2021.' iz unix time stamp formata.
 function getDate(unix_timestamp) {
     unix_timestamp = parseInt(unix_timestamp)
@@ -159,13 +176,26 @@ function getDate(unix_timestamp) {
     return day + "." + (date.getMonth()+1) + "." + date.getFullYear() + ".";
 }
 
-// Funkcija iz vraća datum ili vrijeme u zadanom formatu iz unix time stamp formata.
+// Funkcija iz vraća datum ili vrijeme u zadanom formatu iz unix time stamp formata. (GMT+0100)
 function getTime(unix_timestamp, format) {
+    //console.log("pretvaram unix_timestamp " +  unix_timestamp )
     var date = new Date(unix_timestamp * 1000);
+    //console.log(date)
+    //console.log(date.getHours())
     var formattedTime = Qt.formatDateTime(date, format)
-
+    //console.log(formattedTime)
     return formattedTime;
 }
+
+function getDateTime(unix_timestamp) {
+    unix_timestamp = parseInt(unix_timestamp)
+    // Create a new JavaScript Date object based on the timestamp
+    // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+    var date = new Date(unix_timestamp * 1000);
+
+    return date
+}
+
 
 // Funkcija iz vraća dan u tjednu iz unix time stamp formata.
 function getWeekDay(unix_timestamp) {
@@ -192,7 +222,6 @@ function convertTo(units, value) {
     if (units === "celsius")
         return value
     else if (units === "fahrenheit") {
-        console.log("F to C")
         let fahrenheit = value * 9/5 + 32
 
         return fahrenheit

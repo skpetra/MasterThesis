@@ -1,24 +1,25 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
+// Search bar za odabir grada za prikaz vremenske prognoze.
+// Sastoji se od tekstualnog polja za unos imena grada i dropdowna za prikaz liste gradova dostupnih za odabir.
 Item {
 
     id: suggestionBox
 
-    // properties
+    // --- public properties ---
     property bool isEmpty: true
 
     width: parent.width/2
     height: 35
 
-
     // polje za unos teksta
     TextField {
         id: cityTextField
 
-        implicitWidth: parent.width
-        implicitHeight: parent.height // zbog cityTextField.contentHeight warninga - QML TextField: Binding loop detected for property "implicitHeight"
         placeholderText: qsTr("Enter city")
+        implicitWidth: parent.width
+        implicitHeight: parent.height // zbog cityTextField.contentHeight warninga - QML TextField: Binding loop detected for property "implicitHeight" // todo
 
         // uređivanje polja
         background: Rectangle {
@@ -31,9 +32,9 @@ Item {
             id: itemMagnifier
             anchors.top: cityTextField.top
             anchors.left: cityTextField.left
-            anchors.margins: cityTextField.height*0.2 // margine oko povećala su 20% visine polja za unos texta
-            height: suggestionBox.height - 2*anchors.margins
-            width: suggestionBox.height - 2*anchors.margins
+            anchors.margins: cityTextField.height * 0.2 // margine oko povećala su 20% visine polja za unos texta
+            height: suggestionBox.height - 2 * anchors.margins
+            width: suggestionBox.height - 2 * anchors.margins
             Image{
                 id: iconMagnifier
                 height: parent.height
@@ -45,10 +46,10 @@ Item {
 
         // text pomaknut nakon ikone povećala
         leftPadding: itemMagnifier.width + 2 * itemMagnifier.anchors.margins
-        // centriranje teksta
+        // vertikalno centriranje teksta
         topPadding: (cityTextField.height - cityTextField.contentHeight)/2
 
-        // brisanje unesenog teksta
+        // brisanje unesenog teksta na gumb
         MouseArea {
             height: suggestionBox.height - 2*anchors.margins
             width: suggestionBox.height - 2*anchors.margins
@@ -70,7 +71,7 @@ Item {
             }
             onClicked: cityTextField.text = ""
 
-            Behavior on opacity { NumberAnimation{} }
+            Behavior on opacity { NumberAnimation {} }
         }
 
         onTextChanged: {
@@ -79,23 +80,7 @@ Item {
         }
     }
 
-    function setSuggestionBoxState(text){
-        if(isEmpty){
-            suggestionBox.state = ""
-        }
-        else{
-            filterModel.setFilterString(text)
-
-            if (filterModel.rowCount() !== 0){
-                suggestionBox.state = "dropDown"
-                dropDown.height = setDropDownHeight()
-            }
-            else
-                suggestionBox.state = ""
-        }
-    }
-
-
+    // dropdown za prikaz liste gradova dostupnih za odabir
     Rectangle {
         id: dropDown
         width: suggestionBox.width
@@ -194,14 +179,6 @@ Item {
         }
     }
 
-    // dropDown prikazuje do 5 elemenata
-    function setDropDownHeight(){
-        if (filterModel.rowCount() > 5)
-            return 5*suggestionBox.height*0.7
-
-        return filterModel.rowCount()*suggestionBox.height*0.7
-    }
-
     transitions: Transition {
         NumberAnimation {
             target: dropDown
@@ -209,5 +186,33 @@ Item {
             easing.type: Easing.OutExpo
             duration: 1000
         }
+    }
+
+
+    // --- private functions ---
+
+    // Funkcija za postavljanje stanja suggestion box-a ovisno o unesenom tekstu.
+    function setSuggestionBoxState(text){
+        if(isEmpty){
+            suggestionBox.state = ""
+        }
+        else{
+            filterModel.setFilterString(text)
+
+            if (filterModel.rowCount() !== 0){
+                suggestionBox.state = "dropDown"
+                dropDown.height = setDropDownHeight()
+            }
+            else
+                suggestionBox.state = ""
+        }
+    }
+
+    // dropDown prikazuje do 5 elemenata
+    function setDropDownHeight(){
+        if (filterModel.rowCount() > 5)
+            return 5 * suggestionBox.height * 0.7
+
+        return filterModel.rowCount() * suggestionBox.height * 0.7
     }
 }

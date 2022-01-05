@@ -1,6 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.2
 
 import "../qml/pages"
 import "../qml/controls"
@@ -15,7 +15,7 @@ ApplicationWindow {
     readonly property alias pageStack: stackView
 
     width: 900
-    height: 600
+    height: 700
     visible: true
     title: qsTr("Weather")
 

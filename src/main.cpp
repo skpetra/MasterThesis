@@ -1,10 +1,11 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 
 #include "citieslistmodel.h"
 #include <QQmlContext>
 
-#include <QtQml>
+
+#include <QIcon>
 
 
 int main(int argc, char *argv[])
@@ -13,7 +14,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
+
+
+    app.setWindowIcon(QIcon(":/resources/icons/detailArrows.png"));
 
     QQmlApplicationEngine engine;
 

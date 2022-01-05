@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.4
+import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts
 
 import "../models"
@@ -12,6 +13,12 @@ import "qrc:/js/utils.js" as Utils
 import "qrc:/js/config.js" as Config
 
 // Stranica za prikaz dostupnih podataka trenutne vremenske prognoze.
+// Stranica se logički sastoji od 4 dijela
+//      - toolbar sa mogućnostima povratka na HomePage, odabira prikaza trenutne ili sedmodnevne prognoze, odabira novog grada preko searchboxate promjenu tepmetaturne jedinice (°C/°F)
+//      - collapsible područje za prikaz trenutnih vremenskih značakji (ime grada, animacija vremenskih uvjeta, trenutna i feels like temperatura)
+//        i detalja trenutne prognoze (izlazak/zalazak sunca, vlaga, vjetar, uvi)
+//      - listview element za prikaz temperature i vremenskih uvjeta po satima
+//      - panel za prikaz grafa koji prikazuje detalje o vjetru, padalinala i tlaku zraka po satima ovisno o odabiru
 Page {
 
     id: currentWeatherPage
@@ -37,6 +44,11 @@ Page {
         updateTemperatureData()
     }
 
+    Rectangle {
+        anchors.fill: parent
+        color: "#4682b4"
+    }
+
     // scrollanje stranice
     ScrollView {
         id: scrollView
@@ -45,7 +57,7 @@ Page {
         contentHeight: parent.height
         clip: true
         ScrollBar.vertical.policy : ScrollBar.AlwaysOn
-        ScrollBar.vertical.opacity: 0
+        ScrollBar.vertical.visible: false
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
         CurrentWeatherWidget {
@@ -53,35 +65,26 @@ Page {
 
             width: currentWeatherPage.width
             y: currentWeatherPage.height * 0.1
-            //height: currentWeatherPage.height / 3
             widgetHeight: currentWeatherPage.height / 3
             cityName: currentWeatherPage.cityName
 
             onStateChanged: {
-                //console.log("currentWeatherWidget.height: " + currentWeatherWidget.height)
-
-                if(state === 'Details'){
-                    scrollView.contentHeight += widgetHeight
-                }
+                if(state === 'Details')
+                    scrollView.contentHeight += widgetHeight // todo: visine elemenata neovisne o visini prozora!
                 else
                     scrollView.contentHeight -= widgetHeight
             }
         }
 
+        // element za prikaz liste temperature i vremenskih uvjeta po satima
         Rectangle {
             id: listViewBox
-
             anchors.top: currentWeatherWidget.bottom
             width: parent.width * 0.9
-            height: 120 //oneHourWidget.width
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: parent.height * 0.02
-
+            height: 120 //oneHourWidget.width // todo
             color: "transparent"
-
-            ListModel {
-                id: hourlyListModel
-            }
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: parent.height * 0.03
 
             // scrollanje listviewa pomoću miša
             MouseArea {
@@ -89,6 +92,10 @@ Page {
                 onWheel: function (wheel) {
                     currentWeatherHourlyListView.flick(wheel.angleDelta.y * 6, 0)
                 }
+            }
+
+            ListModel {
+                id: hourlyListModel
             }
 
             ListView {
@@ -101,16 +108,15 @@ Page {
 
                 orientation: ListView.LeftToRight
                 flickableDirection: Flickable.HorizontalFlick
-                clip:true
+                clip: true
 
                 delegate: Rectangle {
-                    width: 90 // 10 veće od oneHourWidget zbog nekih elemenata npr sunca
+                    width: 90 // 10 veće od oneHourWidget zbog nekih elemenata npr sunca // todo
                     height: 140
                     color: "transparent"
 
                     OneHourWidget {
                         id: oneHourWidget
-
                         hour: formattedHour
                         temperature: temp
                         weatherCode: code
@@ -120,18 +126,15 @@ Page {
             }
         }
 
-    //    Rectangle {
-    //        id: rectSeparator
-    //        anchors.top: listViewBox.bottom
-    //        //anchors.topMargin: parent.height * 0.03
-    //        //anchors.horizontalCenter: currentWeatherPage.horizontalCenter
-    //        width: currentWeatherPage.width * 0.9
-    //        height: 1
-    //        color: "blue"
-    //    }
+        HourlyDetailsWidget {
+            id: hourlyDetailsWidget
+            width: parent.width * 0.9
+            height: parent.height * 0.3 //oneHourWidget.width // todo
+            anchors.top: listViewBox.bottom
+            anchors.topMargin: parent.height * 0.03
+            anchors.horizontalCenter: parent.horizontalCenter
 
-        Component.onCompleted: {
-            //console.log("CURRENT WEATHER " + longitude + " " + latitude)
+            onWidgetTabChanged: function (tab) { setChartData(tab) }
         }
     }
 
@@ -142,7 +145,7 @@ Page {
         // Podaci o vremenu (current, hourly, daily) za jedan grad dohvaćaju se samo jednom po odabranom gradu na suggestionboxu za odabir grada.
         // inače se prikazuju već prije dohvaćeni podaci (npr. koji su bili poslani stranici SevenDaysWeatherPage).
         if (typeof weatherData === "undefined") {
-            console.log("Dohvaćam nove podatke: " + "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&units=metric")
+            //console.log("Dohvaćam nove podatke: " + "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&units=metric")
 
             var xhr = new XMLHttpRequest;
             xhr.open("GET", "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&units=metric");
@@ -157,7 +160,6 @@ Page {
         }
         else
             setWeatherData(weatherData)
-
     }
 
 
@@ -167,27 +169,57 @@ Page {
     // Podaci se dohvaćaju odnosno šalju na Component.onCompleted CurrentWeatherPage stranice.
     function setWeatherData(obj){
 
-        // ---------- currentWeatherWidget ----------
+        // ---------- CurrentWeatherWidget ----------
         currentWeatherWidget.temperature = Math.floor(Utils.convertTo(units, obj.current.temp)) + "°"
         currentWeatherWidget.feelsLike = Math.floor(Utils.convertTo(units, obj.current.feels_like)) + "°"
         Utils.setWeatherAnimation(currentWeatherWidget.weatherAnimation, obj.current.weather[0].id + "", obj.current.weather[0].icon, currentWeatherWidget.weatherAnimationDimensions, currentWeatherWidget.weatherAnimationDimensions)  // will trigger the onLoaded code when complete.
+        // --- DailyWindWidget na CurrentWeatherWidget ---
+        currentWeatherWidget.windDetails.speed = obj.current.wind_speed
+        currentWeatherWidget.windDetails.direction = obj.current.wind_deg
+        // --- HumidityWidget na CurrentWeatherWidget ---
+        currentWeatherWidget.humidityDetails.percent = obj.current.humidity
+        // --- UVIndexWidget na CurrentWeatherWidget ---
+        currentWeatherWidget.uviDetails.uvi = obj.current.uvi
+        // --- SunsetSunriseWidget na CurrentWeatherWidget ---
+        currentWeatherWidget.sunDetails.sunrise = Utils.getLocalTime(obj.current.sunrise, obj.timezone_offset, "hh:mm:ss") // šalje se unaprijed izračunato lokalno vrijeme izlaska sunca
+        currentWeatherWidget.sunDetails.sunset = Utils.getLocalTime(obj.current.sunset, obj.timezone_offset, "hh:mm:ss") // šalje se unaprijed izračunato lokalno vrijeme zalaska sunca
 
-
-        // ---------- hourlyListModel -----------
-        var x = new Date()
-        var UTCseconds = (Math.floor(x.getTime()/1000) + x.getTimezoneOffset()*60) // current UTC
-        UTCseconds += obj.timezone_offset // local utc
-        //var curentHourLocal =  Utils.getTime(Math.floor(UTCseconds), "h")
+        // ---------- HourlyListModel -----------
         for (var i in obj.hourly) {
-               if (Number(i) <= 24){
-                    hourlyListModel.append({
-                         formattedHour: Utils.getTime(obj.hourly[Number(i)].dt + obj.timezone_offset, "hh"),
-                         code: obj.hourly[Number(i)].weather[0].id + "",
-                         icon: obj.hourly[Number(i)].weather[0].icon + "",
-                         temp: Math.floor(Utils.convertTo(units, obj.hourly[Number(i)].temp)) + "°"
-                    })
-                }
+            if (Number(i) > 0 && Number(i) <= 25) { // podaci se prikazuju od sljedećeg sata (Number(i) > 0) pa narednih 24 sata
+                hourlyListModel.append({
+                    formattedHour: Utils.getLocalTime(obj.hourly[Number(i)].dt, obj.timezone_offset, "hh"),
+                    code: obj.hourly[Number(i)].weather[0].id + "",
+                    icon: obj.hourly[Number(i)].weather[0].icon + "",
+                    temp: Math.floor(Utils.convertTo(units, obj.hourly[Number(i)].temp)) + "°"
+                })
+            }
         }
+
+        // učitavanje pripadnog grafa ovisno o selektiranom tabu
+        setChartData(hourlyDetailsWidget.tab)
+    }
+
+    // Funkcija učitava graf sa željenim podacima ovisno o selektiranom tabu
+    function setChartData(tab) {
+        // ---------- HourlyWindWidget ----------
+        if (tab === "wind")
+            hourlyDetailsWidget.loader.setSource("qrc:/qml/visualizations/widgets/HourlyWindWidget.qml",
+                                                {
+                                                    weatherData: currentWeatherPage.weatherData
+                                                })
+        // ---------- HourlyPrecipitationWidget ----------
+        else if (tab === "precipitation")
+            hourlyDetailsWidget.loader.setSource("qrc:/qml/visualizations/widgets/HourlyPrecipitationWidget.qml",
+                                                {
+                                                    weatherData: currentWeatherPage.weatherData
+                                                })
+        // ---------- HourlyPressureWidget ----------
+        else if (tab === "pressure")
+            hourlyDetailsWidget.loader.setSource("qrc:/qml/visualizations/widgets/HourlyPressureWidget.qml",
+                                                {
+                                                    weatherData: currentWeatherPage.weatherData
+                                                })
     }
 
     // Podaci o temperaturi se ažuriraju ovisno o mjernoj jedinici pozivanjem funkcije za preračunavanje °C u °F.
@@ -201,10 +233,8 @@ Page {
 
         // ------ hourlyListModel ------
         for (var i in weatherData.hourly) {
-            if(Number(i) <= 24)
-                hourlyListModel.setProperty(Number(i), "temp", Math.floor(Utils.convertTo(units, weatherData.hourly[Number(i)].temp)) + "°")
+            if(Number(i) > 0 && Number(i) <= 25) // podaci se prikazuju od sljedećeg sata (Number(i) > 0) pa narednih 24 sata
+                hourlyListModel.setProperty(Number(i)-1, "temp", Math.floor(Utils.convertTo(units, weatherData.hourly[Number(i)].temp)) + "°") // podaci u listi kreću od 0 (Number(i)-1)
         }
     }
 }
-
-

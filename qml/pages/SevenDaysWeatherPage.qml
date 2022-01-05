@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.15
+import QtQuick.Controls.Material
 
 import "../controls"
 import "../visualizations"
@@ -18,13 +19,12 @@ Page {
 
     // --- public properties ---
     property string cityName
-    // api za sedam dana ne može dohvatiti prognozu preko imena grada
-    // kao current prognoza pa su potrebne lon i lat da se preko njih dohvaća
-    property double longitude
-    property double latitude
     property string units: "celsius"
     // weatherData svojstvo je objekt dobiven iz stringa podataka u JSON formatu
     property var weatherData
+
+    property double longitude
+    property double latitude
 
     signal unitsButtonToggled(string units)
 
@@ -36,47 +36,85 @@ Page {
         updateTemperatureData()
     }
 
-    ListModel {
-        id: sevenDaysListModel
+
+    Rectangle {
+        anchors.fill: parent
+        color: "#4682b4" //"slateblue"
     }
 
-    ListView {
+    Text {
+        id: pageTitle
+        text: qsTr(title)
+        width: parent.width
+        font.bold: true
+        font.pixelSize: 50
+        fontSizeMode: Text.Fit
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
 
-        id: sevenDaysListView
+    }
 
-        anchors.fill: parent
-        model: sevenDaysListModel
-        snapMode: ListView.SnapToItem
+    Rectangle {
+        id: listViewBox
+        anchors.top: pageTitle.bottom
+        width: parent.width * 0.9
+        height: parent.height * 0.867 - pageTitle.height
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: "transparent"
+        //color: "#7FB3D5"
 
-        delegate: Component {
-            id: sevenDaysDelegate
 
-            LongTermDayWidget {
-                width: sevenDaysListView.width
-                // - mainItem -
-                weekDay: weekDayModel
-                date: dateModel
-                weatherIcon: weatherIconModel
-                weatherCode: weatherCodeModel
-                temperatureMin: temperatureMinModel
-                temperatureMax: temperatureMaxModel
-                // - WindWidget -
-                windSpeed: windSpeedModel
-                windDirection: windDirectionModel
-                windGust: windGustModel
-                // - HumidityWidget -
-                humidity: humidityModel
-                dew: dewModel
+
+        ListModel {
+            id: sevenDaysListModel
+        }
+
+        ListView {
+
+            id: sevenDaysListView
+
+            anchors.fill: listViewBox
+            model: sevenDaysListModel
+            snapMode: ListView.SnapToItem
+            clip: true
+
+            delegate: Component {
+                id: sevenDaysDelegate
+
+
+                LongTermDayWidget {
+                    width: sevenDaysListView.width * 0.9
+                    // - mainItem -
+                    weekDay: weekDayModel
+                    date: dateModel
+                    weatherIcon: weatherIconModel
+                    weatherCode: weatherCodeModel
+                    temperatureMin: temperatureMinModel
+                    temperatureMax: temperatureMaxModel
+                    // - SunsetSunriseWidget -
+                    sunset: sunsetModel
+                    sunrise: sunriseModel
+                    // - DailyWindWidget -
+                    windSpeed: windSpeedModel
+                    windDirection: windDirectionModel
+                    // - HumidityWidget -
+                    humidity: humidityModel
+                    // - UVIndexWidget
+                    uvIndex: uviModel
+
+                    //anchors.horizontalCenter: parent ? parent.horizontalCenter :
+                }
+            }
+
+            spacing: 10
+            anchors.margins: 10
+
+            Component.onCompleted: {
+                setWeatherData()
             }
         }
-
-        spacing: 8
-        anchors.margins: 10
-
-        Component.onCompleted: {
-            setWeatherData()
-        }
     }
+
 
     // --- private functions ---
 
@@ -86,6 +124,7 @@ Page {
     function setWeatherData() {
 
         for (var i in weatherData.daily) {
+            console.log(weatherData.daily[i].uvi)
             sevenDaysListModel.append({
                  weekDayModel: Utils.getWeekDay(weatherData.daily[i].dt),
                  dateModel: Utils.getDate(weatherData.daily[i].dt),
@@ -93,13 +132,12 @@ Page {
                  weatherIconModel: weatherData.daily[i].weather[0].icon,
                  temperatureMinModel: Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.min)) + "°", // todo: pretvorit int????
                  temperatureMaxModel: Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.max)) + "°",
-                 sunsetModel: weatherData.daily[i].sunset,
-                 sunriseModel: weatherData.daily[i].sunrise,
+                 sunsetModel: Utils.getLocalTime(weatherData.daily[i].sunset, weatherData.timezone_offset),
+                 sunriseModel: Utils.getLocalTime(weatherData.daily[i].sunrise, weatherData.timezone_offset),
                  windSpeedModel: weatherData.daily[i].wind_speed,
                  windDirectionModel: weatherData.daily[i].wind_deg,
-                 windGustModel: weatherData.daily[i].wind_gust,
                  humidityModel: parseInt(weatherData.daily[i].humidity),
-                 dewModel: parseInt(weatherData.daily[i].dew_point)
+                 uviModel: weatherData.daily[i].uvi
             })
         }
     }
