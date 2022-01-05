@@ -44,6 +44,12 @@ QVariant CitiesListModel::data(const QModelIndex &index, int role) const
         case Roles::CountryRole:
             return QString(mCities.at(index.row()).second);
 
+        case Roles::LongitudeRole:
+            return mCoordinates.at(index.row()).first;
+
+        case Roles::LatitudeRole:
+            return mCoordinates.at(index.row()).second;
+
         default: // default QVariant() if we do not handle the specified role.
             return QVariant();
     }
@@ -56,6 +62,8 @@ QHash<int, QByteArray> CitiesListModel::roleNames() const
     QHash<int, QByteArray> rn;
     rn[Roles::CityRole] = "city";
     rn[Roles::CountryRole] = "country";
+    rn[Roles::LongitudeRole] = "longitude";
+    rn[Roles::LatitudeRole] = "latitude";
     return rn;
 }
 
@@ -83,6 +91,7 @@ void CitiesListModel::readCities()
         QJsonArray jArr = json_doc.array();
         QJsonValue val;
         CityCountryPair cityCountryPair;
+        Coordinates cityCoordinates;
 
 
         for(auto jsonObj : jArr)
@@ -90,12 +99,21 @@ void CitiesListModel::readCities()
             cityCountryPair.first = jsonObj.toObject().value("name").toString();
             cityCountryPair.second = jsonObj.toObject().value("country").toString();
 
+            cityCoordinates.first = jsonObj.toObject().value("coord").toObject().value("lon").toDouble();
+            cityCoordinates.second = jsonObj.toObject().value("coord").toObject().value("lat").toDouble();;
+            //qDebug() << jsonObj.toObject().value("coord").toObject().value("lon").toDouble();
+            //qDebug() << jsonObj.toObject().value("country");
+
+
+
+            //qDebug() << cityCoordinates.first << " " << cityCoordinates.second;
 
             mCities.append(cityCountryPair);
+            mCoordinates.append(cityCoordinates);
             //m_city.append(cityCountryPair.first);
             //qDebug() << cityCountryPair.first << " " << cityCountryPair.second;
        }
-        qDebug() << mCities.size();
+        qDebug() << mCoordinates.size();
         qDebug() << Qt::endl;
 
 }
@@ -126,5 +144,15 @@ void CitiesProxyModel::setFilterString(QString input)
 QString CitiesProxyModel::getCityName(const QModelIndex &index)
 {
     return this->data(index, CitiesListModel::Roles::CityRole).toString();
+}
+
+double CitiesProxyModel::getCityLongitude(const QModelIndex &index)
+{
+    return this->data(index, CitiesListModel::Roles::LongitudeRole).toDouble();
+}
+
+double CitiesProxyModel::getCityLatitude(const QModelIndex &index)
+{
+    return this->data(index, CitiesListModel::Roles::LatitudeRole).toDouble();
 }
 

@@ -1,24 +1,25 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
-Rectangle {
+// Search bar za odabir grada za prikaz vremenske prognoze.
+// Sastoji se od tekstualnog polja za unos imena grada i dropdowna za prikaz liste gradova dostupnih za odabir.
+Item {
 
     id: suggestionBox
 
-    // properties
+    // --- public properties ---
     property bool isEmpty: true
 
     width: parent.width/2
     height: 35
 
-
     // polje za unos teksta
     TextField {
         id: cityTextField
 
-        implicitWidth: parent.width
-        implicitHeight: parent.height
         placeholderText: qsTr("Enter city")
+        implicitWidth: parent.width
+        implicitHeight: parent.height // zbog cityTextField.contentHeight warninga - QML TextField: Binding loop detected for property "implicitHeight" // todo
 
         // uređivanje polja
         background: Rectangle {
@@ -31,9 +32,9 @@ Rectangle {
             id: itemMagnifier
             anchors.top: cityTextField.top
             anchors.left: cityTextField.left
-            anchors.margins: cityTextField.height*0.2 // margine oko povećala su 20% visine polja za unos texta
-            height: suggestionBox.height - 2*anchors.margins
-            width: suggestionBox.height - 2*anchors.margins
+            anchors.margins: cityTextField.height * 0.2 // margine oko povećala su 20% visine polja za unos texta
+            height: suggestionBox.height - 2 * anchors.margins
+            width: suggestionBox.height - 2 * anchors.margins
             Image{
                 id: iconMagnifier
                 height: parent.height
@@ -44,11 +45,11 @@ Rectangle {
         }
 
         // text pomaknut nakon ikone povećala
-        leftPadding: itemMagnifier.width + 2*itemMagnifier.anchors.margins
-        // centriranje teksta
-        topPadding: (height-contentHeight)/2
+        leftPadding: itemMagnifier.width + 2 * itemMagnifier.anchors.margins
+        // vertikalno centriranje teksta
+        topPadding: (cityTextField.height - cityTextField.contentHeight)/2
 
-        // brisanje unesenog teksta
+        // brisanje unesenog teksta na gumb
         MouseArea {
             height: suggestionBox.height - 2*anchors.margins
             width: suggestionBox.height - 2*anchors.margins
@@ -70,7 +71,7 @@ Rectangle {
             }
             onClicked: cityTextField.text = ""
 
-            Behavior on opacity { NumberAnimation{} }
+            Behavior on opacity { NumberAnimation {} }
         }
 
         onTextChanged: {
@@ -79,23 +80,7 @@ Rectangle {
         }
     }
 
-    function setSuggestionBoxState(text){
-        if(isEmpty){
-            suggestionBox.state = ""
-        }
-        else{
-            filterModel.setFilterString(text)
-
-            if (filterModel.rowCount() !== 0){
-                suggestionBox.state = "dropDown"
-                dropDown.height = setDropDownHeight()
-            }
-            else
-                suggestionBox.state = ""
-        }
-    }
-
-
+    // dropdown za prikaz liste gradova dostupnih za odabir
     Rectangle {
         id: dropDown
         width: suggestionBox.width
@@ -154,7 +139,14 @@ Rectangle {
 
                             // cityTextField.text = filterModel.getCityName(q_model_index) ---- kad se vratim sa sljedeće stranice na ovu s BACK da ostane upisan traženi grad
                             cityTextField.text = ""
-                            pageStack.push("qrc:/qml/pages/CityMenuPage.qml", { cityName: filterModel.getCityName(q_model_index)})
+
+                            pageStack.push("qrc:/qml/pages/CurrentWeatherPage.qml",
+                                           {
+                                               cityName: filterModel.getCityName(q_model_index),
+                                               longitude: filterModel.getCityLongitude(q_model_index),
+                                               latitude: filterModel.getCityLatitude(q_model_index),
+                                               units: pageStack.currentItem.units ? pageStack.currentItem.units : "celsius" // ako je grad odabran na MenuPage defaultno ce bit toggleButton na °C, inače se temperatura prikazuje ovisno o jedinici koja je bila odabrana na prethodnoj stranici (Current ili SevenDays page)
+                                           })
                         }
                     }
                 }
@@ -187,14 +179,6 @@ Rectangle {
         }
     }
 
-    // dropDown prikazuje do 5 elemenata
-    function setDropDownHeight(){
-        if (filterModel.rowCount() > 5)
-            return 5*suggestionBox.height*0.7
-
-        return filterModel.rowCount()*suggestionBox.height*0.7
-    }
-
     transitions: Transition {
         NumberAnimation {
             target: dropDown
@@ -204,16 +188,31 @@ Rectangle {
         }
     }
 
-// podatke ću ipak dohvaćati kroz xml model
-//    function requestWeatherData(cityName) {
-//        var xhr = new XMLHttpRequest;
-//        xhr.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=394bb9ce78287e8504f6c5456b49757a");
-//        xhr.onreadystatechange = function() {
-//            if (xhr.readyState == XMLHttpRequest.DONE) {
-//                console.log(xhr.responseText); // ispisuje dohvaćeni json tekst
-//                var a = JSON.parse(xhr.responseText);
-//            }
-//        }
-//        xhr.send();
-//    }
+
+    // --- private functions ---
+
+    // Funkcija za postavljanje stanja suggestion box-a ovisno o unesenom tekstu.
+    function setSuggestionBoxState(text){
+        if(isEmpty){
+            suggestionBox.state = ""
+        }
+        else{
+            filterModel.setFilterString(text)
+
+            if (filterModel.rowCount() !== 0){
+                suggestionBox.state = "dropDown"
+                dropDown.height = setDropDownHeight()
+            }
+            else
+                suggestionBox.state = ""
+        }
+    }
+
+    // dropDown prikazuje do 5 elemenata
+    function setDropDownHeight(){
+        if (filterModel.rowCount() > 5)
+            return 5 * suggestionBox.height * 0.7
+
+        return filterModel.rowCount() * suggestionBox.height * 0.7
+    }
 }

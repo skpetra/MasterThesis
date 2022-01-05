@@ -1,9 +1,10 @@
 import QtQuick 2.0
-import "basic"
+import "../basic"
 
 // Atmosphere.qml predstavlja grupu vremenskih uvjeta koja prikazuje jačinu vidljivosti.
 // Svojstvo fogIntensity regulira broj animiranih 'crtica' uz oblak, dok je manja vidljivost
 // prikazana bez oblaka regulirana svojstvom intensity.
+// Predviđeni omjer širine i visine elementa je: visina = širina.
 Item {
     id: atmosphereGroupItem
 

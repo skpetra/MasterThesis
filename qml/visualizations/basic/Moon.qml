@@ -2,6 +2,7 @@ import QtQuick
 import Qt5Compat.GraphicalEffects
 
 // Moon.qml predstavlja mjesec u prikazu vremenskih uvjeta.
+// Predviđeni omjer širine i visine elementa je: visina = širina.
 Rectangle {
 
     id: moonItem

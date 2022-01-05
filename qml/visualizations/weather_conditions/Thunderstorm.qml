@@ -1,8 +1,9 @@
 import QtQuick 2.2
-import "basic"
+import "../basic"
 
 // Thunderstorm.qml prikazuje Thunderstorm grupu vremenskih uvijeta koja uvijek sadrži broken clouds ikonu
 // zajedno sa treptajućom munjom, dok kišu prikazuje ovisno o uvjetima i jačini.
+// Predviđeni omjer širine i visine elementa je: visina = širina * 0.6.
 Item {
     id: thunderstormGroupItem
 
@@ -54,7 +55,7 @@ Item {
 
     Component.onCompleted: {
         if (precipitationType){
-            precipitationLoader.setSource("basic/Precipitation.qml",
+            precipitationLoader.setSource("../basic/Precipitation.qml",
                                           { type: precipitationType,
                                             intensity: precipitationIntensity,
                                             width: thunderstormGroupItem.width,

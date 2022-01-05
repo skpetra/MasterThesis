@@ -1,4 +1,4 @@
-QT += quick
+QT += quick charts widgets
 
 CONFIG += c++11
 
@@ -41,5 +41,9 @@ DISTFILES += \
     qml/visualizations/Sun.qml \
     qml/visualizations/Thunderstorm.qml \
     resources/citiesList.json
+    qml/visualizations/basic/CircularArc.qml \
+    resources/icons/bottomArrow.png \
+    resources/icons/pinwheel2.png \
+    resources/icons/topArrow.png
 
 

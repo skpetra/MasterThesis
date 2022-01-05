@@ -1,6 +1,7 @@
 import QtQuick 2.0
 
 // Cloud.qml predstavlja oblak u prikazu vremenskih uvjeta.
+// Predviđeni omjer širine i visine elementa je: visina = širina * 0.6.
 Item {
     id: cloudItem
 

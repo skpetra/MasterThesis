@@ -1,8 +1,9 @@
 import QtQuick 2.2
-import "basic"
+import "../basic"
 
 // Rain grupa vremenskih uvijeta prikazuje kišu zajedno sa poluoblačnim (sunce ili mjesec), oblačnim (broen clouds) vremenom ili ledenom kišom.
 // Jačina kiše ovisi o intenzitetu i veličini kapljica.
+// Predviđeni omjer širine i visine elementa je: visina = širina.
 Item {
 
     id: rainGroupItem
@@ -31,14 +32,14 @@ Item {
 
     Component.onCompleted: {
         if (timeOfDay == 'd' || timeOfDay == 'n') {
-            cloudLoader.setSource("../visualizations/Clouds.qml",
+            cloudLoader.setSource("Clouds.qml",
                                  { timeOfDay: timeOfDay,
                                    width: rainGroupItem.width,
                                    height: rainGroupItem.height
                                  })
         }
         else {
-            cloudLoader.setSource("../visualizations/Clouds.qml",
+            cloudLoader.setSource("/Clouds.qml",
                                  { brokenClouds: true,
                                    width: rainGroupItem.width,
                                    height: rainGroupItem.height
@@ -46,7 +47,7 @@ Item {
         }
 
         if (isFreezingRain){
-            freezingRainLoader.setSource("../visualizations/basic/Precipitation.qml",
+            freezingRainLoader.setSource("../basic/Precipitation.qml",
                                         {   type: "snow",
                                             intensity: 2,
                                             particlesSize: rainGroupItem.width * 0.06,
