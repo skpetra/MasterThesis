@@ -123,7 +123,7 @@ function setWeatherAnimation(weatherAnimationLoader, weather_code, weather_icon,
 // ---------------------------- ---------------------------- ----------------------------
 
 
-// ---------------------------- CurrentWeatherXmlModel, SevenDaysWeatherModel ----------------------------
+// ---------------------------- SevenDaysWeatherModel ----------------------------
 
 function encodeUnits(units) {
     if (units === "celsius")

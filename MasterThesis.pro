@@ -22,10 +22,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    fonts/PermanentMarker-Regular.ttf \
     js/utils.js \
     qml/CitiesSuggestionBox.qml \
     qml/main.qml \
-    qml/models/CurrentWeatherXmlModel.qml \
     qml/pages/CitiesListPage.qml \
     qml/pages/CityMenuPage.qml \
     qml/pages/CurrentWeatherPage.qml \

@@ -1,6 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 // Toolbar na svim stranicama osim početne. Sadrži elemente koji omogućuju povratak na početnu stranicu,
@@ -32,7 +32,7 @@ ToolBar {
     }
 
 
-    // Toolbar pa time i buttoni "Today" i "Week" se prikazuju kad nije otvorena stranica MenuPage,
+    // Toolbar pa time i buttoni "Today" i "Week" se prikazuju kad nije otvorena stranica HomePage,
     // a u svakom takvom slučaju stranica odnosno currentItem ima cityName, longitude i latitude.
 
     Button {
@@ -102,6 +102,7 @@ ToolBar {
 
         CitiesSuggestionBox {
             anchors.fill: parent
+            fontSize: 12
         }
     }
 

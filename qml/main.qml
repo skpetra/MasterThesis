@@ -6,7 +6,7 @@ import "../qml/pages"
 import "../qml/controls"
 
 // Glavni prozor aplikacije. Sadrži komponentu StackView za navigaciju.
-// U headeru prozor ima ToolBar koji inicijalno na početnoj MenuPage stranici nije vidljiv,
+// U headeru prozor ima ToolBar koji inicijalno na početnoj HomePage stranici nije vidljiv,
 // dok je na ostalim stranicama vidljiv.
 ApplicationWindow {
 
@@ -37,12 +37,12 @@ ApplicationWindow {
         id: stackView
 
         anchors.fill: parent
-        initialItem: MenuPage {}
+        initialItem: HomePage {}
 
-        // Toolbar nije vidljiv na MenuPage, dok je na ostalim stranicama vidljiv.
+        // Toolbar nije vidljiv na HomePage, dok je na ostalim stranicama vidljiv.
         onCurrentItemChanged: {
             console.log("OBJECT NAME CHANGED: " + pageStack.currentItem)
-            if (pageStack.currentItem.objectName !== "MenuPage") {
+            if (pageStack.currentItem.objectName !== "HomePage") {
                 toolBar.visible = true
             }
             else {

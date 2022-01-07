@@ -4,10 +4,9 @@
         <file>qml/main.qml</file>
         <file>resources/icons/magnifier.png</file>
         <file>resources/icons/backspace.png</file>
-        <file>qml/pages/MenuPage.qml</file>
+        <file>qml/pages/HomePage.qml</file>
         <file>resources/icons/back.png</file>
         <file>qml/pages/CurrentWeatherPage.qml</file>
-        <file>qml/models/CurrentWeatherXmlModel.qml</file>
         <file>resources/icons/thunderbolt.png</file>
         <file>resources/icons/rain.png</file>
         <file>resources/icons/snow.png</file>
@@ -57,9 +56,12 @@
         <file>resources/icons/windDirection3.png</file>
         <file>qml/controls/Spinner.qml</file>
         <file>qml/controls/RoundPane.qml</file>
+        <file>qml/visualizations/basic/HangingElement.qml</file>
         <file>resources/icons/line.png</file>
+        <file>qml/visualizations/animations/HangingElementsAnimation.qml</file>
         <file>resources/icons/icon.png</file>
         <file>resources/icons/icon2.png</file>
         <file>resources/icons/icon3.png</file>
+        <file>fonts/RemachineScript.ttf</file>
     </qresource>
 </RCC>
