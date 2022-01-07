@@ -173,8 +173,8 @@ Page {
 
         for (var i in weatherData.daily) {
             if (Number(i) > 0) { // današnja prognoza se ne prikazuje (weatherData.daily[0])
-                sevenDaysListModel.setProperty(i, "temperatureMinModel", Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.min)) + "°")
-                sevenDaysListModel.setProperty(i, "temperatureMaxModel", Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.max)) + "°")
+                sevenDaysListModel.setProperty(i-1, "temperatureMinModel", Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.min)) + "°")
+                sevenDaysListModel.setProperty(i-1, "temperatureMaxModel", Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.max)) + "°")
             }
         }
     }

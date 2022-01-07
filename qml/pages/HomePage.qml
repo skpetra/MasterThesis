@@ -17,6 +17,11 @@ Page {
         color: "#4682b4"
     }
 
+    // početna animacija
+    HangingElementsAnimation {
+        id: hangingElementsAnimation
+    }
+
     // naslov aplikacije
     FontLoader {
         id: webFont
@@ -42,9 +47,6 @@ Page {
         Component.onCompleted: { opacity = 1 }
     }
 
-    HangingElementsAnimation {
-        id: hangingElementsAnimation
-    }
 
     Pane {
         id: citiesSuggestionBox

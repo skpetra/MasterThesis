@@ -37,6 +37,9 @@ int main(int argc, char *argv[])
     // ---------------- ---------------- ---------------- ---------------- ---
 
 
+    const char *uri = "org.qtproject.demo.weather";
+    // @uri org.qtproject.demo.weather
+
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

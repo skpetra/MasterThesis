@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 // Search bar za odabir grada za prikaz vremenske prognoze.
@@ -21,6 +21,7 @@ Item {
         implicitWidth: parent.width
         implicitHeight: parent.height // zbog cityTextField.contentHeight warninga - QML TextField: Binding loop detected for property "implicitHeight" // todo
         placeholderText: qsTr("Enter city")
+        validator: RegularExpressionValidator { regularExpression: /\p{L}+/ }
         font.pixelSize: fontSize
         clip: true
 
