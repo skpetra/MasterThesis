@@ -1,4 +1,6 @@
 import QtQuick 2.0
+import QtQuick.Controls.Material
+import "../../controls"
 
 // Cloud.qml predstavlja oblak u prikazu vremenskih uvjeta.
 // Predviđeni omjer širine i visine elementa je: visina = širina * 0.6.
@@ -9,14 +11,14 @@ Item {
     property string cloudColor: "lightgray"
 
     implicitWidth: 100
-    implicitHeight: 60
+    height: width * 0.6
 
-    Rectangle {
+    RoundPane {
         anchors.bottom: parent.bottom
         width: parent.width
         height: parent.height * 0.55
         radius: height * 0.9
-        color: cloudColor
+        Material.background: cloudColor
     }
 
     Rectangle {

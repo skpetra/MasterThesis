@@ -19,7 +19,6 @@
         <file>js/utils.js</file>
         <file>resources/icons/back2.png</file>
         <file>js/config.js</file>
-        <file>qml/visualizations/Sunclock.qml</file>
         <file>qml/controls/CitiesSuggestionBox.qml</file>
         <file>qml/controls/UnitsToggleButton.qml</file>
         <file>qml/pages/SevenDaysWeatherPage.qml</file>
@@ -56,5 +55,11 @@
         <file>resources/icons/pinwheel2.png</file>
         <file>qml/visualizations/basic/CircularArc.qml</file>
         <file>resources/icons/windDirection3.png</file>
+        <file>qml/controls/Spinner.qml</file>
+        <file>qml/controls/RoundPane.qml</file>
+        <file>resources/icons/line.png</file>
+        <file>resources/icons/icon.png</file>
+        <file>resources/icons/icon2.png</file>
+        <file>resources/icons/icon3.png</file>
     </qresource>
 </RCC>

@@ -27,7 +27,7 @@ Rectangle {
         Text {
             text: hour
             font.pixelSize: 15
-            color: "#252525"
+            color: "#002149"
             Layout.alignment: Qt.AlignHCenter
             horizontalAlignment: Text.AlignHCenter
         }
@@ -47,7 +47,7 @@ Rectangle {
         Text {
             text: temperature
             font.pixelSize: 25
-            color: "#252525"
+            color: "#002149"
             Layout.alignment: Qt.AlignCenter
             horizontalAlignment: Text.AlignHCenter
         }

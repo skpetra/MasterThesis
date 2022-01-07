@@ -39,7 +39,7 @@ Item {
                                  })
         }
         else {
-            cloudLoader.setSource("/Clouds.qml",
+            cloudLoader.setSource("Clouds.qml",
                                  { brokenClouds: true,
                                    width: rainGroupItem.width,
                                    height: rainGroupItem.height

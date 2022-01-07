@@ -15,7 +15,7 @@ Item {
     signal widgetTabChanged(string tabName)
 
     // --- private properties ---
-    property string tab: "wind"
+    property string _tab: "wind"
 
     // ToolBar za odabir koje vrste informacija koje će se prikazivati na grafu (wind, precipitation ili pressure).
     ToolBar {
@@ -47,8 +47,8 @@ Item {
                 precipitationButton.Material.background = "transparent"
                 pressureButton.Material.background = "transparent"
                 // trenutno otvoreni tab
-                tab = "wind"
-                hourlyDetailsWidget.widgetTabChanged(tab)
+                _tab = "wind"
+                hourlyDetailsWidget.widgetTabChanged(_tab)
             }
         }
 
@@ -73,8 +73,8 @@ Item {
                 windButton.Material.background = "transparent"
                 pressureButton.Material.background = "transparent"
                 // trenutno otvoreni tab
-                tab = "precipitation"
-                hourlyDetailsWidget.widgetTabChanged(tab)
+                _tab = "precipitation"
+                hourlyDetailsWidget.widgetTabChanged(_tab)
             }
         }
 
@@ -99,8 +99,8 @@ Item {
                 windButton.Material.background = "transparent"
                 precipitationButton.Material.background = "transparent"
                 // trenutno otvoreni tab
-                tab = "pressure"
-                hourlyDetailsWidget.widgetTabChanged(tab)
+                _tab = "pressure"
+                hourlyDetailsWidget.widgetTabChanged(_tab)
             }
         }
     }

@@ -1,5 +1,6 @@
 import QtQuick 2.2
 
+import "../../../js/utils.js" as Utils
 
 // Element prikazuje sunce sa zrakama koje trepere oko njega.
 // Predviđeni omjer širine i visine elementa je: visina = širina.
@@ -19,12 +20,12 @@ Item {
 
     // unutarnji krug
     Rectangle {
-        anchors.horizontalCenter: parent.horizontalCenter
         y: _getPosOnCircle(148).y
         width: sunItem.radius
         height: sunItem.radius
-        radius: sunItem.radius/2
+        radius: sunItem.radius / 2
         color: itemColor
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     Repeater {
@@ -76,18 +77,14 @@ Item {
 
     // --- private functions ---
 
-    function _toRadian(degree) {
-        return (degree * 3.14159265)/180
-    }
-
     function _getPosOnCircle(angleInDegree) {
-        var centerX = sunItem.width/2
-        var centerY = sunItem.height/2
+        var centerX = sunItem.width / 2
+        var centerY = sunItem.height / 2
         var posX = 0
         var posY = 0
 
-        posX = centerX + sunItem._innerRadius * Math.cos(_toRadian(angleInDegree))
-        posY = centerY - sunItem._innerRadius * Math.sin(_toRadian(angleInDegree))
+        posX = centerX + sunItem._innerRadius * Math.cos(Utils.convertToRadian(angleInDegree))
+        posY = centerY - sunItem._innerRadius * Math.sin(Utils.convertToRadian(angleInDegree))
 
         return Qt.point(posX, posY)
     }

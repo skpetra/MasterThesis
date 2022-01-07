@@ -17,7 +17,7 @@ ApplicationWindow {
     width: 900
     height: 700
     visible: true
-    title: qsTr("Weather")
+    title: qsTr("QTher")
 
     header: PageToolBar {
         id: toolBar

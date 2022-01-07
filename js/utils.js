@@ -173,7 +173,7 @@ function getDate(unix_timestamp) {
     // Will display time in 10:30:23 format
     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
-    return day + "." + (date.getMonth()+1) + "." + date.getFullYear() + ".";
+    return day.trim() + "." + (date.getMonth()+1) + "." + date.getFullYear() + ".";
 }
 
 // Funkcija iz vraća datum ili vrijeme u zadanom formatu iz unix time stamp formata. (GMT+0100)
@@ -242,3 +242,11 @@ function convertToC(fahrenheit) {
 
   return celsius;
 }
+
+
+// ---------------------------- funkcije za kružne elemente ----------------------------
+
+function convertToRadian(degree) {
+    return (degree * 3.14159265) / 180
+}
+

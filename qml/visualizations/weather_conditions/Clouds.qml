@@ -11,7 +11,7 @@ Item {
     property string timeOfDay
 
     implicitWidth: 100
-    implicitHeight: 70
+    height: width * 0.7
 
     Loader {
         id: timeOfDayLoader

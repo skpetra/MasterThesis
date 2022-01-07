@@ -2,9 +2,6 @@ import QtQuick 2.0
 import QtQuick.Layouts
 import QtQuick.Controls.Material
 
-import "qrc:/js/utils.js" as Utils
-import "qrc:/js/config.js" as Config
-
 import ".."
 
 // Centralni collapsible element za prikaz podataka o trenutnoj vremenskoj prognozi.
@@ -45,7 +42,7 @@ Item {
             font.bold: true           
             font.pixelSize: 50
             fontSizeMode: Text.Fit
-            color: "#252525"
+            color: "#002149"
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             Layout.preferredWidth: mainItem.width / 3
@@ -85,7 +82,7 @@ Item {
                 width: temperatureGroupBox.width / 2
                 font.bold: true
                 font.pixelSize: 50
-                color: "#252525"
+                color: "#002149"
                 fontSizeMode: Text.Fit
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
@@ -118,7 +115,7 @@ Item {
         anchors.bottomMargin: 5
 
         Behavior on rotation {
-             NumberAnimation { duration: 500 }
+             NumberAnimation { duration: 250 }
         }
     }
 
@@ -197,14 +194,14 @@ Item {
         name: "Details"
         PropertyChanges { target: detailsItem; opacity: 1 }
         // "otvaranje" pravokutnika za prikaz detalja
-        PropertyChanges { target: detailsItem; height: widgetHeight * 0.8 }
-        PropertyChanges { target: currentWeatherWidget; height: widgetHeight * 1.8 }
+        PropertyChanges { target: detailsItem; height: 170 } // visina elemenata detalja je fiksna
+        PropertyChanges { target: currentWeatherWidget; height: widgetHeight + detailsItem.height }
         PropertyChanges { target: arrowDown; rotation: 180 }
     }
 
     transitions: Transition {
         //Make the state changes smooth
-        NumberAnimation { duration: 500; property: "height" }
-        NumberAnimation { duration: 500; property: "opacity" }
+        NumberAnimation { duration: 250; property: "height" }
+        NumberAnimation { duration: 250; property: "opacity" }
     }
 }
