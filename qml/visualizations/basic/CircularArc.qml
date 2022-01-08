@@ -1,4 +1,4 @@
-import QtQuick
+import QtQuick 6.0
 import QtQuick.Shapes
 
 // CircularArc.qml ovisno o zadanim stupnjevima (svojstva begin i end) prikazuje

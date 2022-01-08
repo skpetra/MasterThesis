@@ -1,4 +1,4 @@
-import QtQuick
+import QtQuick 6.0
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material
 

@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Controls.Material
+import QtQuick 6.0
+import QtQuick.Controls 6.0
+import QtQuick.Controls.Material 6.0
 import QtQuick.Layouts
 
 // Toolbar na svim stranicama osim početne. Sadrži elemente koji omogućuju povratak na početnu stranicu,

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 import "../basic"
 
 // Grupa vremenskih uvjeta Drizze uvijek se prikazuje ikonom brokenClouds a jačina

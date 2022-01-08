@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/citiesList.json</file>
         <file>qml/main.qml</file>
         <file>resources/icons/magnifier.png</file>
         <file>resources/icons/backspace.png</file>
@@ -16,6 +15,7 @@
         <file>qml/visualizations/basic/Sun.qml</file>
         <file>js/utils.js</file>
         <file>js/config.js</file>
+        <file>resources/citiesList.json</file>
         <file>qml/controls/CitiesSuggestionBox.qml</file>
         <file>qml/controls/UnitsToggleButton.qml</file>
         <file>qml/pages/SevenDaysWeatherPage.qml</file>
@@ -54,7 +54,6 @@
         <file>resources/icons/line.png</file>
         <file>qml/visualizations/animations/HangingElementsAnimation.qml</file>
         <file>resources/icons/icon.png</file>
-        <file>resources/icons/icon2.png</file>
         <file>fonts/RemachineScript.ttf</file>
     </qresource>
 </RCC>

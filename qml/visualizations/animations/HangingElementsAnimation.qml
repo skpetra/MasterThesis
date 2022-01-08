@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 6.0
 
 import "../weather_conditions"
 import "../basic"

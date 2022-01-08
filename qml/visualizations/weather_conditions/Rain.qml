@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 6.0
 import "../basic"
 
 // Rain grupa vremenskih uvijeta prikazuje kišu zajedno sa poluoblačnim (sunce ili mjesec), oblačnim (broen clouds) vremenom ili ledenom kišom.

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 import QtQuick.Layouts 1.2
 
 import "qrc:/js/utils.js" as Utils

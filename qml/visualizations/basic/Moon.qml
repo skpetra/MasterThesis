@@ -1,4 +1,4 @@
-import QtQuick
+import QtQuick 6.0
 import Qt5Compat.GraphicalEffects
 import "../../controls"
 import QtQuick.Controls.Material

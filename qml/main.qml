@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.2
+import QtQuick 6.0
+import QtQuick.Window 2.0
+import QtQuick.Controls 6.0
 
 import "../qml/pages"
 import "../qml/controls"

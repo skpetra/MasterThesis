@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 import "../basic"
 
 // Grupa vremenskih uvijeta koja prikazuje poluoblačno i oblačno vrijeme ovisno o dobu dana.

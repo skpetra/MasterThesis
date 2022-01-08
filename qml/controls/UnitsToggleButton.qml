@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls.Material 2.2
+import QtQuick 6.0
+import QtQuick.Controls.Material 6.0
 
 // Toggle button za odabir temperaturne mjerne jedinice u kojoj će se prikazivati svi podaci o temperaturi na stranici.
 Pane {
@@ -58,6 +58,7 @@ Pane {
         }
 
         MouseArea {
+            id: unitsToggleButtonMouseArea
             anchors.fill: parent
             onClicked: {
                 celsius = !celsius

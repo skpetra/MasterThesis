@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 import QtQuick.Controls
 import QtCharts 2.15
 
@@ -58,7 +58,7 @@ Item {
 
             axisY: ValuesAxis {
                 id: yValueAxis
-                min: 0
+                min: -2 // stupac je minimalno uzvišen
                 max: 120 // prikaz postotka iznad stupca
                 visible: false
                 gridVisible: false

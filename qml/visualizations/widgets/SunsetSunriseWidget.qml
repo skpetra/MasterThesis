@@ -1,4 +1,4 @@
-import QtQuick 2.1
+import QtQuick 6.0
 import QtQuick.Layouts 1.15 // The module is new in Qt 5.1 and requires Qt Quick 2.1.
 
 // Element prikazuje podatke o izlasku i zalasku sunca.

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 import QtQuick.Particles 2.0
 
 // Preticipation.qml predstavlja padaline u prikazu vremenskih uvjeta.

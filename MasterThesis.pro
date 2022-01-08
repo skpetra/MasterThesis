@@ -1,4 +1,4 @@
-QT += quick charts widgets
+QT += quick charts
 
 CONFIG += c++11
 
@@ -65,6 +65,7 @@ DISTFILES += \
     resources/icons/backspace.png \
     resources/icons/bottomArrow.png \
     resources/icons/home.png \
+    resources/icons/icon.png \
     resources/icons/line.png \
     resources/icons/magnifier.png \
     resources/icons/pinwheel.png \
@@ -77,5 +78,4 @@ DISTFILES += \
     resources/icons/umbrella.png \
     resources/icons/wind.png \
     resources/icons/windDirection.png
-
 

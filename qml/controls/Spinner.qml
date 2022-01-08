@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 6.0
 import "../../js/utils.js" as Utils
 
 // "Busy indicator" element za označavanje učitavanja podataka na stranicu.
