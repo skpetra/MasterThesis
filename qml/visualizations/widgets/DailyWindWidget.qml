@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Controls.Material 2.0

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 import QtQuick.Controls
 import QtCharts
 
@@ -91,19 +91,20 @@ Item {
         yValueAxis.max = weatherData.hourly[0].pressure
         yValueAxis.min = weatherData.hourly[0].pressure
         for (var i in weatherData.hourly) {
-           if (Number(i) > 0 && Number(i) <= 25) { // podaci se prikazuju od sljedećeg sata (Number(i) > 0) pa narednih 24 sata
+           if (Number(i) <= 24) {
                if (yValueAxis.max < weatherData.hourly[Number(i)].pressure)
                     yValueAxis.max = weatherData.hourly[Number(i)].pressure
                if (yValueAxis.min > weatherData.hourly[Number(i)].pressure)
                     yValueAxis.min = weatherData.hourly[Number(i)].pressure
             }
         }
+        // postavljanje razmaka između vrha i dna grafa
         yValueAxis.max += 5
         yValueAxis.min -= 1
 
         // Dodavanje podataka potrebnih za iscrtavanje grafa.
         for (var j in weatherData.hourly) {
-           if (Number(i) > 0 && Number(i) <= 25) { // podaci se prikazuju od sljedećeg sata (Number(i) > 0) pa narednih 24 sata
+           if (Number(j) <= 24) {
                lineSeries.append(Utils.getDateTime(weatherData.hourly[Number(j)].dt + weatherData.timezone_offset), weatherData.hourly[Number(j)].pressure)
                scatterSeries.append(Utils.getDateTime(weatherData.hourly[Number(j)].dt + weatherData.timezone_offset), weatherData.hourly[Number(j)].pressure)
            }

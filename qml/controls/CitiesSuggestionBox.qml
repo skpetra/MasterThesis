@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 6.0
+import QtQuick.Controls 2.15
 
 // Search bar za odabir grada za prikaz vremenske prognoze.
 // Sastoji se od tekstualnog polja za unos imena grada i dropdowna za prikaz liste gradova dostupnih za odabir.
@@ -9,21 +9,26 @@ Item {
 
     // --- public properties ---
     property bool isEmpty: true
+    property int fontSize: 15
 
-    width: parent.width/2
+    width: parent.width / 2
     height: 35
 
     // polje za unos teksta
     TextField {
         id: cityTextField
 
-        placeholderText: qsTr("Enter city")
         implicitWidth: parent.width
         implicitHeight: parent.height // zbog cityTextField.contentHeight warninga - QML TextField: Binding loop detected for property "implicitHeight" // todo
+        placeholderText: qsTr("Enter city")
+        validator: RegularExpressionValidator { regularExpression: /\p{L}+/ }
+        font.pixelSize: fontSize
+        clip: true
 
         // uređivanje polja
         background: Rectangle {
-            border.color: cityTextField.activeFocus ? "gray" : "darkgray"
+            id: backgroundRectangle
+            //border.color: cityTextField.activeFocus ? "gray" : "darkgray"
             radius: 2
         }
 
@@ -32,7 +37,7 @@ Item {
             id: itemMagnifier
             anchors.top: cityTextField.top
             anchors.left: cityTextField.left
-            anchors.margins: cityTextField.height * 0.2 // margine oko povećala su 20% visine polja za unos texta
+            anchors.margins: cityTextField.height * 0.15 // margine oko povećala su 15% visine polja za unos texta
             height: suggestionBox.height - 2 * anchors.margins
             width: suggestionBox.height - 2 * anchors.margins
             Image{
@@ -40,22 +45,26 @@ Item {
                 height: parent.height
                 width: parent.width
                 source: "../../resources/icons/magnifier.png"
-                opacity: 0.2
+                smooth: true
+                fillMode: Image.PreserveAspectFit
             }
         }
 
         // text pomaknut nakon ikone povećala
         leftPadding: itemMagnifier.width + 2 * itemMagnifier.anchors.margins
+        rightPadding: itemBackspace.width + 2 * itemBackspace.anchors.margins
         // vertikalno centriranje teksta
-        topPadding: (cityTextField.height - cityTextField.contentHeight)/2
+        topPadding: (cityTextField.height - cityTextField.contentHeight) / 2
+
 
         // brisanje unesenog teksta na gumb
         MouseArea {
-            height: suggestionBox.height - 2*anchors.margins
-            width: suggestionBox.height - 2*anchors.margins
+            id: itemBackspace
+            height: suggestionBox.height - 2 * anchors.margins
+            width: suggestionBox.height - 2 * anchors.margins
             anchors.top: cityTextField.top
             anchors.right: cityTextField.right
-            anchors.margins: cityTextField.height*0.15
+            anchors.margins: cityTextField.height * 0.15
 
             opacity: isEmpty ? 0 : 1
             Accessible.role: Accessible.Button
@@ -67,7 +76,6 @@ Item {
                 source: "../../resources/icons/backspace.png"
                 height: parent.height
                 width: parent.width
-                opacity: 0.2
             }
             onClicked: cityTextField.text = ""
 
@@ -89,13 +97,14 @@ Item {
         radius: 2
         anchors.top: cityTextField.bottom
         anchors.margins: 2
+
         color: "lightgray"
 
         ListView {
             id: listView
             width: parent.width
             height: parent.height
-            snapMode: ListView.SnapToItem // kraj poravnava s najbližim elementom
+            //snapMode: ListView.SnapToItem // kraj poravnava s najbližim elementom
 
             model: filterModel
             currentIndex: 0
@@ -114,7 +123,7 @@ Item {
                     Text {
                         text: city + ", " + country
                         anchors.fill: parent
-                        anchors.leftMargin: itemMagnifier.anchors.margins
+                        anchors.leftMargin: itemMagnifier.anchors.leftMargin * 1.6
                         verticalAlignment: Text.AlignVCenter
                     }
 
@@ -145,7 +154,7 @@ Item {
                                                cityName: filterModel.getCityName(q_model_index),
                                                longitude: filterModel.getCityLongitude(q_model_index),
                                                latitude: filterModel.getCityLatitude(q_model_index),
-                                               units: pageStack.currentItem.units ? pageStack.currentItem.units : "celsius" // ako je grad odabran na MenuPage defaultno ce bit toggleButton na °C, inače se temperatura prikazuje ovisno o jedinici koja je bila odabrana na prethodnoj stranici (Current ili SevenDays page)
+                                               units: pageStack.currentItem.units ? pageStack.currentItem.units : "celsius" // ako je grad odabran na HomePage defaultno ce bit toggleButton na °C, inače se temperatura prikazuje ovisno o jedinici koja je bila odabrana na prethodnoj stranici (Current ili SevenDays page)
                                            })
                         }
                     }
@@ -175,7 +184,7 @@ Item {
         name: "dropDown"
         PropertyChanges {
             target: dropDown
-            height: setDropDownHeight()
+            height: filterModel.rowCount() ? setDropDownHeight() : 0
         }
     }
 

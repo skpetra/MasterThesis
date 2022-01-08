@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 
 // Element predstavlja komponentu koja prikazuje podatak o UV indeksu i njegovoj jačini.
 // Sastoji se od naslova komponente, pravokutnika za prikaz UV indeksa obojenog pripadajućom bojom te opisne jačine indeksa.

@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 6.0
 import "../basic"
 
 // Snow grupa vremenskih uvijeta prikazuje snijeg ili susnježicu.

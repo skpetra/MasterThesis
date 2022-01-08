@@ -1,4 +1,4 @@
-import QtQuick 2.1
+import QtQuick 6.0
 import QtQuick.Layouts 1.15
 import QtQuick.Controls.Material
 
@@ -50,10 +50,26 @@ Pane {
         anchors.top: parent.top
 
         // dan i datum vremenske prognoze
-        Column {
-            anchors.verticalCenter: parent.verticalCenter
-            Text { text: weekDay }
-            Text { text: date }
+        Item {
+            height: parent.height
+            width: parent.width / 3
+
+            Text {
+                text: weekDay
+                font.bold: true
+                font.pixelSize: 20
+                color: "dimgray"
+                anchors.bottom: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+            Text {
+                text: date
+                font.pixelSize: 15
+                color: "dimgray"
+                anchors.topMargin: 7
+                anchors.top: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
 
         // animacija vremenskih uvjeta
@@ -61,8 +77,8 @@ Pane {
 
             id: weatherAnimationItem
 
-            width: mainItemHeight - 2 * anchors.margins
-            height: mainItemHeight - 2 * anchors.margins
+            width: mainItemHeight * 0.9 - 2 * anchors.margins
+            height: width
             anchors.centerIn: parent
             anchors.margins: mainItemHeight * 0.05
             color: "transparent"
@@ -77,39 +93,57 @@ Pane {
         }
 
         // min-max temperatura
-        GridLayout {
-            columns: 2
-            anchors.verticalCenter: parent.verticalCenter
+        Item {
+            width: parent.width / 3
+            height: parent.height
             anchors.right: parent.right
 
-            Text {
-                text: temperatureMax
-                Layout.column: 0
-                Layout.row: 0
-                Layout.alignment: Qt.AlignCenter
-            }
+            GridLayout {
+                columns: 2
+                anchors.centerIn: parent
+                anchors.topMargin: -10
+                columnSpacing: 20
 
-            Text {
-                text: "High"
-                Layout.column: 0
-                Layout.row: 1
-                Layout.alignment: Qt.AlignCenter
-            }
+                Text {
+                    text: temperatureMax
+                    font.bold: true
+                    font.pixelSize: 20
+                    color: "dimgray"
+                    Layout.column: 0
+                    Layout.row: 0
+                    Layout.alignment: Qt.AlignCenter
+                }
 
-            Text {
-                text: temperatureMin
-                Layout.column: 1
-                Layout.row: 0
-                Layout.alignment: Qt.AlignCenter
-            }
+                Text {
+                    text: "High"
+                    font.pixelSize: 15
+                    color: "dimgray"
+                    Layout.column: 0
+                    Layout.row: 1
+                    Layout.alignment: Qt.AlignCenter
+                }
 
-            Text {
-                text: "Low"
-                Layout.column: 1
-                Layout.row: 1
-                Layout.alignment: Qt.AlignCenter
+                Text {
+                    text: temperatureMin
+                    font.bold: true
+                    font.pixelSize: 20
+                    color: "dimgray"
+                    Layout.column: 1
+                    Layout.row: 0
+                    Layout.alignment: Qt.AlignCenter
+                }
+
+                Text {
+                    text: "Low"
+                    font.pixelSize: 15
+                    color: "dimgray"
+                    Layout.column: 1
+                    Layout.row: 1
+                    Layout.alignment: Qt.AlignCenter
+                }
             }
         }
+
     }
 
     // strelica za otvaranje detalja
@@ -134,7 +168,7 @@ Pane {
     Item {
         id: detailsItem
 
-        width: mainItem.width * 0.9
+        width: mainItem.width
         height: 0
         anchors.top: mainItem.bottom
 
@@ -149,7 +183,7 @@ Pane {
 
             Layout.margins: 0
             Layout.fillWidth: true
-            spacing: detailsItem.width * 0.02
+            spacing: detailsItem.width * 0.005
 
             SunsetSunriseWidget {
                 id: sunWidget
@@ -206,7 +240,7 @@ Pane {
         name: "Details"
         // Make details visible
         PropertyChanges { target: detailsItem; opacity: 1 }
-        PropertyChanges { target: detailsItem; height: longTermDayWidget.mainItemHeight }
+        PropertyChanges { target: detailsItem; height: longTermDayWidget.mainItemHeight * 0.9 }
         // "otvaranje" pravokutnika za prikaz detalja
         PropertyChanges { target: longTermDayWidget; height: mainItemHeight * 2 }
         PropertyChanges { target: arrowDown; rotation: 180 }

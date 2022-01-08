@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 6.0
 import "../basic"
 
 // Thunderstorm.qml prikazuje Thunderstorm grupu vremenskih uvijeta koja uvijek sadrži broken clouds ikonu

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 import QtQuick.Shapes 1.15
 
 // Element prikazuje vjetrenjaču koja se rotira brzinom ovisno o jačini vjetra.

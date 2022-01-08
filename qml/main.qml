@@ -1,12 +1,12 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.2
+import QtQuick 6.0
+import QtQuick.Window 2.0
+import QtQuick.Controls 6.0
 
 import "../qml/pages"
 import "../qml/controls"
 
 // Glavni prozor aplikacije. Sadrži komponentu StackView za navigaciju.
-// U headeru prozor ima ToolBar koji inicijalno na početnoj MenuPage stranici nije vidljiv,
+// U headeru prozor ima ToolBar koji inicijalno na početnoj HomePage stranici nije vidljiv,
 // dok je na ostalim stranicama vidljiv.
 ApplicationWindow {
 
@@ -17,7 +17,7 @@ ApplicationWindow {
     width: 900
     height: 700
     visible: true
-    title: qsTr("Weather")
+    title: qsTr("QTher")
 
     header: PageToolBar {
         id: toolBar
@@ -37,27 +37,17 @@ ApplicationWindow {
         id: stackView
 
         anchors.fill: parent
-        initialItem: MenuPage {}
+        initialItem: HomePage {}
 
-        // Toolbar nije vidljiv na MenuPage, dok je na ostalim stranicama vidljiv.
+        // Toolbar nije vidljiv na HomePage, dok je na ostalim stranicama vidljiv.
         onCurrentItemChanged: {
             console.log("OBJECT NAME CHANGED: " + pageStack.currentItem)
-            if (pageStack.currentItem.objectName !== "MenuPage") {
+            if (pageStack.currentItem.objectName !== "HomePage") {
                 toolBar.visible = true
             }
             else {
                 toolBar.visible = false
             }
         }
-
-        // tranzicija između stranica
-//        pushEnter: Transition {
-//            PropertyAnimation {
-//                property: "opacity"
-//                from: 0
-//                to:1
-//                duration: 200
-//            }
-//        }
     }
 }

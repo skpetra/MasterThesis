@@ -3,10 +3,7 @@
 
 #include "citieslistmodel.h"
 #include <QQmlContext>
-
-
 #include <QIcon>
-
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +14,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
 
-    app.setWindowIcon(QIcon(":/resources/icons/detailArrows.png"));
+    app.setWindowIcon(QIcon(":/resources/icons/icon.png"));
 
     QQmlApplicationEngine engine;
 
@@ -36,6 +33,8 @@ int main(int argc, char *argv[])
     context->setContextProperty("filterModel", &citiesFilterModel);
     // ---------------- ---------------- ---------------- ---------------- ---
 
+    const char *uri = "org.qtproject.demo.weather";
+    // @uri org.qtproject.demo.weather
 
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

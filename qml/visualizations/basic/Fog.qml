@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 
 // Fog.qml predstavlja jednu animiranu crtu koja
 // će biti dio magle u prikazu vremenskih uvjeta.

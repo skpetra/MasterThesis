@@ -1,9 +1,8 @@
-import QtQuick 2.2
-import QtQuick.Controls 2.4
+import QtQuick 6.0
+import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts
 
-import "../models"
 import "../visualizations"
 import "../visualizations/weather_conditions"
 import "../visualizations/widgets"
@@ -14,11 +13,11 @@ import "qrc:/js/config.js" as Config
 
 // Stranica za prikaz dostupnih podataka trenutne vremenske prognoze.
 // Stranica se logički sastoji od 4 dijela
-//      - toolbar sa mogućnostima povratka na HomePage, odabira prikaza trenutne ili sedmodnevne prognoze, odabira novog grada preko searchboxate promjenu tepmetaturne jedinice (°C/°F)
-//      - collapsible područje za prikaz trenutnih vremenskih značakji (ime grada, animacija vremenskih uvjeta, trenutna i feels like temperatura)
+//      - toolbar sa mogućnostima povratka na HomePage, odabira prikaza trenutne ili sedmodnevne prognoze, odabira novog grada preko searchboxa te promjenu tepmetaturne jedinice (°C/°F)
+//      - collapsible područje za prikaz trenutnih vremenskih značajki (ime grada, animacija vremenskih uvjeta, trenutna i feels like temperatura)
 //        i detalja trenutne prognoze (izlazak/zalazak sunca, vlaga, vjetar, uvi)
 //      - listview element za prikaz temperature i vremenskih uvjeta po satima
-//      - panel za prikaz grafa koji prikazuje detalje o vjetru, padalinala i tlaku zraka po satima ovisno o odabiru
+//      - panel za prikaz grafa koji prikazuje detalje o vjetru, padalinama i tlaku zraka po satima ovisno o odabiru
 Page {
 
     id: currentWeatherPage
@@ -45,9 +44,23 @@ Page {
     }
 
     Rectangle {
+        id: backgroundRectangle
         anchors.fill: parent
         color: "#4682b4"
     }
+
+    Spinner {
+        anchors.centerIn: parent
+        running: typeof currentWeatherPage.weatherData === "undefined"
+
+        onRunningChanged: {
+            if (running === true)
+                parent.opacity = 0.9
+            else
+                parent.opacity = 1
+        }
+    }
+    Behavior on opacity { OpacityAnimator { duration: 50 } }
 
     // scrollanje stranice
     ScrollView {
@@ -62,18 +75,27 @@ Page {
 
         CurrentWeatherWidget {
             id: currentWeatherWidget
-
             width: currentWeatherPage.width
             y: currentWeatherPage.height * 0.1
-            widgetHeight: currentWeatherPage.height / 3
+            widgetHeight: currentWeatherPage.height / 3.9
             cityName: currentWeatherPage.cityName
+
+            // resizeanje animacije vremenskih uvjeta ovisno o veličini prozora
+            onWidgetHeightChanged: {
+                if (typeof weatherData !== "undefined")
+                    Utils.setWeatherAnimation(currentWeatherWidget.weatherAnimation, weatherData.current.weather[0].id + "", weatherData.current.weather[0].icon, Math.min(currentWeatherWidget.widgetHeight, currentWeatherWidget.width), Math.min(currentWeatherWidget.widgetHeight, currentWeatherWidget.width))
+            }
+            onWidthChanged: {
+                if (typeof weatherData !== "undefined")
+                    Utils.setWeatherAnimation(currentWeatherWidget.weatherAnimation, weatherData.current.weather[0].id + "", weatherData.current.weather[0].icon, Math.min(currentWeatherWidget.widgetHeight, currentWeatherWidget.width), Math.min(currentWeatherWidget.widgetHeight, currentWeatherWidget.width))
+            }
 
             onStateChanged: {
                 if(state === 'Details')
-                    scrollView.contentHeight += widgetHeight // todo: visine elemenata neovisne o visini prozora!
+                    scrollView.contentHeight += widgetHeight
                 else
                     scrollView.contentHeight -= widgetHeight
-            }
+            }            
         }
 
         // element za prikaz liste temperature i vremenskih uvjeta po satima
@@ -84,7 +106,7 @@ Page {
             height: 120 //oneHourWidget.width // todo
             color: "transparent"
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: parent.height * 0.03
+            anchors.topMargin: parent.height * 0.055  // bottom margin - HourlyDetailsWidget.topMargin
 
             // scrollanje listviewa pomoću miša
             MouseArea {
@@ -129,12 +151,12 @@ Page {
         HourlyDetailsWidget {
             id: hourlyDetailsWidget
             width: parent.width * 0.9
-            height: parent.height * 0.3 //oneHourWidget.width // todo
+            height: 200 // fiksne visine
             anchors.top: listViewBox.bottom
-            anchors.topMargin: parent.height * 0.03
+            anchors.topMargin: parent.height * 0.055
             anchors.horizontalCenter: parent.horizontalCenter
 
-            onWidgetTabChanged: function (tab) { setChartData(tab) }
+            onWidgetTabChanged: function (_tab) { setChartData(_tab) }
         }
     }
 
@@ -151,7 +173,7 @@ Page {
             xhr.open("GET", "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&units=metric");
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
-                    var obj = JSON.parse(xhr.responseText);
+                    var obj = JSON.parse(xhr.responseText)
                     weatherData = obj
                     setWeatherData(obj)
                 }
@@ -197,7 +219,7 @@ Page {
         }
 
         // učitavanje pripadnog grafa ovisno o selektiranom tabu
-        setChartData(hourlyDetailsWidget.tab)
+        setChartData(hourlyDetailsWidget._tab)
     }
 
     // Funkcija učitava graf sa željenim podacima ovisno o selektiranom tabu

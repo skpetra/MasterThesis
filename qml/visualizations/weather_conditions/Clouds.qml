@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 6.0
 import "../basic"
 
 // Grupa vremenskih uvijeta koja prikazuje poluoblačno i oblačno vrijeme ovisno o dobu dana.
@@ -11,7 +11,7 @@ Item {
     property string timeOfDay
 
     implicitWidth: 100
-    implicitHeight: 70
+    height: width * 0.7
 
     Loader {
         id: timeOfDayLoader

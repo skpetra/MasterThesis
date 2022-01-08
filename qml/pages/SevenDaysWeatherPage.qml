@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 6.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.15
 import QtQuick.Controls.Material
@@ -11,7 +11,8 @@ import "../visualizations/widgets"
 import "../../js/utils.js" as Utils
 import "../../js/config.js" as Config
 
-// Stranica za prikaz sedmodnevne vremenske prognoze.
+// Stranica za prikaz sedmodnevne vremenske prognoze. Sadrži naziv grada kao naslov te listu
+// LongTermDayWidget.qml "collapsible" elemenata za prikaz dnevnih vremenskih podataka.
 Page {
 
     id: sevenDaysWeatherPage
@@ -19,10 +20,8 @@ Page {
 
     // --- public properties ---
     property string cityName
-    property string units: "celsius"
-    // weatherData svojstvo je objekt dobiven iz stringa podataka u JSON formatu
-    property var weatherData
-
+    property string units: "celsius"    
+    property var weatherData // weatherData svojstvo je objekt dobiven iz stringa podataka u JSON formatu
     property double longitude
     property double latitude
 
@@ -36,51 +35,59 @@ Page {
         updateTemperatureData()
     }
 
-
     Rectangle {
+        id: backgroundRectangle
         anchors.fill: parent
-        color: "#4682b4" //"slateblue"
+        color: "#4682b4"
     }
+
+    Spinner {
+        anchors.centerIn: parent
+        running: typeof sevenDaysWeatherPage.weatherData === "undefined"
+
+        onRunningChanged: {
+            if (running === true)
+                parent.opacity = 0.9
+            else
+                parent.opacity = 1
+        }
+    }
+    Behavior on opacity { OpacityAnimator { duration: 50 } }
 
     Text {
         id: pageTitle
         text: qsTr(title)
         width: parent.width
+        color: "#002149"
         font.bold: true
         font.pixelSize: 50
         fontSizeMode: Text.Fit
         wrapMode: Text.WordWrap
         horizontalAlignment: Text.AlignHCenter
-
+        topPadding: parent.height * 0.05
+        bottomPadding: parent.height * 0.05
     }
 
     Rectangle {
         id: listViewBox
         anchors.top: pageTitle.bottom
         width: parent.width * 0.9
-        height: parent.height * 0.867 - pageTitle.height
+        height: parent.height * 0.97 - pageTitle.height
         anchors.horizontalCenter: parent.horizontalCenter
         color: "transparent"
-        //color: "#7FB3D5"
-
-
 
         ListModel {
             id: sevenDaysListModel
         }
 
         ListView {
-
             id: sevenDaysListView
-
             anchors.fill: listViewBox
             model: sevenDaysListModel
-            snapMode: ListView.SnapToItem
             clip: true
 
             delegate: Component {
                 id: sevenDaysDelegate
-
 
                 LongTermDayWidget {
                     width: sevenDaysListView.width * 0.9
@@ -102,7 +109,7 @@ Page {
                     // - UVIndexWidget
                     uvIndex: uviModel
 
-                    //anchors.horizontalCenter: parent ? parent.horizontalCenter :
+                    anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
                 }
             }
 
@@ -110,7 +117,23 @@ Page {
             anchors.margins: 10
 
             Component.onCompleted: {
-                setWeatherData()
+
+                // ukoliko je korisnik kliknuo na WEEK button prije nego su se učitali podaci na CurrentWeathetPage stranici
+                if (typeof weatherData === "undefined") {
+                    //console.log("Dohvaćam nove podatke: " + "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&units=metric")
+                    var xhr = new XMLHttpRequest;
+                    xhr.open("GET", "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&appid=" + Config.api_key + "&units=metric");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            var obj = JSON.parse(xhr.responseText)
+                            weatherData = obj
+                            setWeatherData(obj)
+                        }
+                    }
+                    xhr.send();
+                }
+                else
+                    setWeatherData(weatherData)
             }
         }
     }
@@ -121,24 +144,25 @@ Page {
     // Funkcija za postavljanje svojstava elemenata za prikaz prognoze na dan i idućih sedam dana.
     // Podaci se iščitavaju iz weatherData svojstva dobivenog od prethodne CurrentWeatherPage stranice.
     // Dohvaćeni podaci dodaju se u ListModel koji se prikazuje u ListViewu.
-    function setWeatherData() {
+    function setWeatherData(weatherData) {
 
         for (var i in weatherData.daily) {
-            console.log(weatherData.daily[i].uvi)
-            sevenDaysListModel.append({
-                 weekDayModel: Utils.getWeekDay(weatherData.daily[i].dt),
-                 dateModel: Utils.getDate(weatherData.daily[i].dt),
-                 weatherCodeModel: weatherData.daily[i].weather[0].id,
-                 weatherIconModel: weatherData.daily[i].weather[0].icon,
-                 temperatureMinModel: Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.min)) + "°", // todo: pretvorit int????
-                 temperatureMaxModel: Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.max)) + "°",
-                 sunsetModel: Utils.getLocalTime(weatherData.daily[i].sunset, weatherData.timezone_offset),
-                 sunriseModel: Utils.getLocalTime(weatherData.daily[i].sunrise, weatherData.timezone_offset),
-                 windSpeedModel: weatherData.daily[i].wind_speed,
-                 windDirectionModel: weatherData.daily[i].wind_deg,
-                 humidityModel: parseInt(weatherData.daily[i].humidity),
-                 uviModel: weatherData.daily[i].uvi
-            })
+            if (Number(i) > 0) { // današnja prognoza se ne prikazuje (weatherData.daily[0])
+                sevenDaysListModel.append({
+                     weekDayModel: Utils.getWeekDay(weatherData.daily[i].dt),
+                     dateModel: Utils.getDate(weatherData.daily[i].dt),
+                     weatherCodeModel: weatherData.daily[i].weather[0].id,
+                     weatherIconModel: weatherData.daily[i].weather[0].icon,
+                     temperatureMinModel: Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.min)) + "°", // todo: pretvorit int????
+                     temperatureMaxModel: Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.max)) + "°",
+                     sunsetModel: Utils.getLocalTime(weatherData.daily[i].sunset, weatherData.timezone_offset, "hh:mm:ss"),
+                     sunriseModel: Utils.getLocalTime(weatherData.daily[i].sunrise, weatherData.timezone_offset, "hh:mm:ss"),
+                     windSpeedModel: weatherData.daily[i].wind_speed,
+                     windDirectionModel: weatherData.daily[i].wind_deg,
+                     humidityModel: parseInt(weatherData.daily[i].humidity),
+                     uviModel: weatherData.daily[i].uvi
+                })
+            }
         }
     }
 
@@ -148,8 +172,10 @@ Page {
     function updateTemperatureData() {
 
         for (var i in weatherData.daily) {
-            sevenDaysListModel.setProperty(i, "temperatureMinModel", Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.min)) + "°")
-            sevenDaysListModel.setProperty(i, "temperatureMaxModel", Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.max)) + "°")
+            if (Number(i) > 0) { // današnja prognoza se ne prikazuje (weatherData.daily[0])
+                sevenDaysListModel.setProperty(i-1, "temperatureMinModel", Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.min)) + "°")
+                sevenDaysListModel.setProperty(i-1, "temperatureMaxModel", Math.floor(Utils.convertTo(units, weatherData.daily[i].temp.max)) + "°")
+            }
         }
     }
 

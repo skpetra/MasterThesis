@@ -1,13 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/citiesList.json</file>
         <file>qml/main.qml</file>
         <file>resources/icons/magnifier.png</file>
         <file>resources/icons/backspace.png</file>
-        <file>qml/pages/MenuPage.qml</file>
-        <file>resources/icons/back.png</file>
+        <file>qml/pages/HomePage.qml</file>
         <file>qml/pages/CurrentWeatherPage.qml</file>
-        <file>qml/models/CurrentWeatherXmlModel.qml</file>
         <file>resources/icons/thunderbolt.png</file>
         <file>resources/icons/rain.png</file>
         <file>resources/icons/snow.png</file>
@@ -17,15 +14,13 @@
         <file>qml/visualizations/basic/Precipitation.qml</file>
         <file>qml/visualizations/basic/Sun.qml</file>
         <file>js/utils.js</file>
-        <file>resources/icons/back2.png</file>
         <file>js/config.js</file>
-        <file>qml/visualizations/Sunclock.qml</file>
+        <file>resources/citiesList.json</file>
         <file>qml/controls/CitiesSuggestionBox.qml</file>
         <file>qml/controls/UnitsToggleButton.qml</file>
         <file>qml/pages/SevenDaysWeatherPage.qml</file>
         <file>resources/icons/pinwheel.png</file>
         <file>qml/controls/PageToolBar.qml</file>
-        <file>resources/icons/detailArrows.png</file>
         <file>qml/visualizations/weather_conditions/Atmosphere.qml</file>
         <file>qml/visualizations/weather_conditions/Clouds.qml</file>
         <file>qml/visualizations/weather_conditions/Drizzle.qml</file>
@@ -49,12 +44,16 @@
         <file>qml/visualizations/widgets/HourlyPrecipitationWidget.qml</file>
         <file>resources/icons/windDirection.png</file>
         <file>qml/visualizations/widgets/SunsetSunriseWidget.qml</file>
-        <file>resources/icons/home2.png</file>
         <file>qml/visualizations/widgets/UVIndexWidget.qml</file>
         <file>resources/icons/bottomArrow.png</file>
         <file>resources/icons/topArrow.png</file>
-        <file>resources/icons/pinwheel2.png</file>
         <file>qml/visualizations/basic/CircularArc.qml</file>
-        <file>resources/icons/windDirection3.png</file>
+        <file>qml/controls/Spinner.qml</file>
+        <file>qml/controls/RoundPane.qml</file>
+        <file>qml/visualizations/basic/HangingElement.qml</file>
+        <file>resources/icons/line.png</file>
+        <file>qml/visualizations/animations/HangingElementsAnimation.qml</file>
+        <file>resources/icons/icon.png</file>
+        <file>fonts/RemachineScript.ttf</file>
     </qresource>
 </RCC>
