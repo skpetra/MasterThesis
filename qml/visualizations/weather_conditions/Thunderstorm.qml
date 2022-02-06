@@ -30,7 +30,7 @@ Item {
         y: parent.width * 0.8 * 0.6 * 0.75 // 75% visine oblaka koja će biti postavljena
         height: parent.width * 0.8 * 0.6
         width: parent.width * 0.2
-        source: "../../resources/icons/thunderbolt.png"
+        source: "qrc:/resources/icons/thunderbolt.png"
 
         Component.onCompleted: thunderboltAnimation.start()
 
